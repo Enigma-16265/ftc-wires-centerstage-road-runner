@@ -99,7 +99,7 @@ public class Evolution extends LinearOpMode {
     public static final double SHOULDER_NEXT_TWO = 0.425;
     public static final double WRIST_NEXT_TWO = 0.565;
     public static final double ELBOW_NEXT_TWO = 0.76;
-
+    //Can I upload code??
 
     //=^-^=
     // score positions (11 rows on the board)
