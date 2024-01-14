@@ -85,9 +85,9 @@ public class EnigmaAuto extends LinearOpMode {
     private static final double ELBOW_INTAKE = Evolution.ELBOW_INTAKE;
     private static final double WRIST_INTAKE = Evolution.WRIST_INTAKE;
     //private static final double SHOULDER_DRIVE = 0.425; // 0.425
-    private static final double SCORE_ONE_SHOULDER = Evolution.SCORE_ONE_SHOULDER;
-    private static final double SCORE_ONE_WRIST = Evolution.SCORE_ONE_WRIST;
-    private static final double SCORE_ONE_ELBOW = Evolution.SCORE_ONE_ELBOW;
+    private static final double SCORE_ZERO_SHOULDER = Evolution.SCORE_ZERO_SHOULDER;
+    private static final double SCORE_ZERO_WRIST = Evolution.SCORE_ZERO_WRIST;
+    private static final double SCORE_ZERO_ELBOW = Evolution.SCORE_ZERO_ELBOW;
 
     public static final double SHOULDER_TOP_TWO = Evolution.SHOULDER_TOP_TWO;
     public static final double WRIST_TOP_TWO = Evolution.WRIST_TOP_TWO;
@@ -495,15 +495,15 @@ public class EnigmaAuto extends LinearOpMode {
         //TODO : Code to drop Pixel on Backdrop
         safeWaitSeconds(0);
         for(int w = 0; w<40; w++) {
-            moveServoGradually(wrist, SCORE_ONE_WRIST);
+            moveServoGradually(wrist, SCORE_ZERO_WRIST);
             sleep(10);
         }
         for(int e = 0; e<20; e++) {
-            moveServoGradually(elbow, SCORE_ONE_ELBOW);
+            moveServoGradually(elbow, SCORE_ZERO_ELBOW);
             sleep(10);
         }
         for(int s = 0; s<200; s++) {
-            moveServoGradually(shoulder, SCORE_ONE_SHOULDER);
+            moveServoGradually(shoulder, SCORE_ZERO_SHOULDER);
             sleep(7);
         }
         sleep(50);

@@ -70,17 +70,18 @@ public class Evolution extends LinearOpMode {
     // servo values
     public static final double AIR_PLANE_INT = 0.1;
     public static final double AIR_PLANE_SHOOT = 0.8;
-    public static final double SHOULDER_DRIVE = 0.425; // 0.425
-    public static final double SHOULDER_INT = 0.43;
-    public static final double ELBOW_DRIVE= 0.53;
+    public static final double SHOULDER_DRIVE = 0.45; // 0.425
+    public static final double SHOULDER_INT = 0.45;
+    public static final double SHOULDER_INTAKE = 0.46;
+    public static final double ELBOW_DRIVE= 0.5;
     public static final double ELBOW_INTAKE = 0.83;
-    public static final double WRIST_DRIVE = 0.195;
-    public static final double WRIST_INTAKE = 0.465;
+    public static final double WRIST_DRIVE = 0.24; // measured at .255
+    public static final double WRIST_INTAKE = 0.476;
     public static final double LEFT_FINGER_GRIP = 0.67;
-    public static final double LEFT_FINGER_DROP = 1;
+    public static final double LEFT_FINGER_DROP = .9;
     public static final double LEFT_FINGER_INTAKE = 1;
     public static final double RIGHT_FINGER_GRIP = .33;
-    public static final double RIGHT_FINGER_DROP = 0;
+    public static final double RIGHT_FINGER_DROP = 0.1;
     public static final double RIGHT_FINGER_INTAKE = 0;
     public static final double TRIGGER_THRESHOLD = 0.5;
     public static final double LAUNCHER_START_POS = 0.8;
@@ -100,65 +101,73 @@ public class Evolution extends LinearOpMode {
     public static final double WRIST_NEXT_TWO = 0.565;
     public static final double ELBOW_NEXT_TWO = 0.76;
     //Can I upload code??
+    //I CAN!!! w dimitri :DD
 
     //=^-^=
     // score positions (11 rows on the board)
     // TODO find positions with McMuffin (currently all set to drive) change to the actual double values like above from McMuffin
+
+    // score zero only used for that first yellow pixel in auto
+    public static final double SCORE_ZERO_SHOULDER = 0.94555;
+    public static final double SCORE_ZERO_WRIST = 0.284;
+    public static final double SCORE_ZERO_ELBOW = 0.63;
+    public static final double SCORE_ZERO_LIFT = LIFT_DRIVE;
+
     // score position one button map (gamepad2.y)
-    public static final double SCORE_ONE_SHOULDER = 0.935;
-    public static final double SCORE_ONE_WRIST = 0.385;
-    public static final double SCORE_ONE_ELBOW = 0.5;
-    public static final double SCORE_ONE_LIFT = LIFT_DRIVE;
+    public static final double SCORE_ONE_SHOULDER = 0.936;
+    public static final double SCORE_ONE_WRIST = 0.235;
+    public static final double SCORE_ONE_ELBOW = 0.679;
+    public static final double SCORE_ONE_LIFT = 0.06;
     // score position two button map (gamepad2.b)
-    public static final double SCORE_TWO_SHOULDER = 0.935;
-    public static final double SCORE_TWO_WRIST = 0.385;
-    public static final double SCORE_TWO_ELBOW = 0.5;
-    public static final double SCORE_TWO_LIFT = 0.27;
+    public static final double SCORE_TWO_SHOULDER = 0.936;
+    public static final double SCORE_TWO_WRIST = 0.235;
+    public static final double SCORE_TWO_ELBOW = 0.679;
+    public static final double SCORE_TWO_LIFT = 0.269;
     // score position three button map (gamepad2.a)
-    public static final double SCORE_THREE_SHOULDER = 0.935;
-    public static final double SCORE_THREE_WRIST = 0.385;
-    public static final double SCORE_THREE_ELBOW = 0.5;
+    public static final double SCORE_THREE_SHOULDER = 0.936;
+    public static final double SCORE_THREE_WRIST = 0.235;
+    public static final double SCORE_THREE_ELBOW = 0.679;
     public static final double SCORE_THREE_LIFT = 0.39;
     // score position four button map (gamepad2.x)
     public static final double SCORE_FOUR_SHOULDER = 0.936;
-    public static final double SCORE_FOUR_WRIST = 0.385;
-    public static final double SCORE_FOUR_ELBOW = 0.5;
-    public static final double SCORE_FOUR_LIFT = 0.48;
+    public static final double SCORE_FOUR_WRIST = 0.235;
+    public static final double SCORE_FOUR_ELBOW = 0.679;
+    public static final double SCORE_FOUR_LIFT = 0.47;
     // score position five button map (gamepad2.left_bumper && gamepad2.y)
-    public static final double SCORE_FIVE_SHOULDER = 0.935;
-    public static final double SCORE_FIVE_WRIST = 0.385;
-    public static final double SCORE_FIVE_ELBOW = 0.5;
-    public static final double SCORE_FIVE_LIFT = 0.55;
+    public static final double SCORE_FIVE_SHOULDER = 0.936;
+    public static final double SCORE_FIVE_WRIST = 0.235;
+    public static final double SCORE_FIVE_ELBOW = 0.679;
+    public static final double SCORE_FIVE_LIFT = 1.0;
     // score position six button map (gamepad2.left_bumper && gamepad2.b)
-    private static final double SCORE_SIX_SHOULDER = 0.895;
-    private static final double SCORE_SIX_WRIST = 0.225;
-    private static final double SCORE_SIX_ELBOW = 0.63;
-    private static final double SCORE_SIX_LIFT = .46;
+    private static final double SCORE_SIX_SHOULDER = 0.937;
+    private static final double SCORE_SIX_WRIST = 0.186;
+    private static final double SCORE_SIX_ELBOW = 0.73;
+    private static final double SCORE_SIX_LIFT = .67;
     // score position seven button map (gamepad2.left_bumper && gamepad2.a)
-    private static final double SCORE_SEVEN_SHOULDER = 0.895;
-    private static final double SCORE_SEVEN_WRIST = 0.225;
-    private static final double SCORE_SEVEN_ELBOW = 0.63;
-    private static final double SCORE_SEVEN_LIFT = .57;
+    private static final double SCORE_SEVEN_SHOULDER = .917;
+    private static final double SCORE_SEVEN_WRIST = 0.156;
+    private static final double SCORE_SEVEN_ELBOW = 0.739;
+    private static final double SCORE_SEVEN_LIFT = .639;
     // score position eight button map (gamepad2.left_bumper && gamepad2.x)
-    private static final double SCORE_EIGHT_SHOULDER = 0.895;
-    private static final double SCORE_EIGHT_WRIST = 0.16;
-    private static final double SCORE_EIGHT_ELBOW = 0.69;
-    private static final double SCORE_EIGHT_LIFT = 0.57;
+    private static final double SCORE_EIGHT_SHOULDER = 0.947;
+    private static final double SCORE_EIGHT_WRIST = 0.070;
+    private static final double SCORE_EIGHT_ELBOW = 0.80;
+    private static final double SCORE_EIGHT_LIFT = 0.64;
     // score position nine button map (gamepad2.left_trigger && gamepad2.y)
-    private static final double SCORE_NINE_SHOULDER = SCORE_ONE_SHOULDER;
-    private static final double SCORE_NINE_WRIST = 0.174;
-    private static final double SCORE_NINE_ELBOW = 0.72;
-    private static final double SCORE_NINE_LIFT = .66;
+    private static final double SCORE_NINE_SHOULDER = SCORE_EIGHT_SHOULDER;
+    private static final double SCORE_NINE_WRIST = SCORE_EIGHT_WRIST;
+    private static final double SCORE_NINE_ELBOW = SCORE_EIGHT_ELBOW;
+    private static final double SCORE_NINE_LIFT = SCORE_EIGHT_LIFT;
     // score position ten button map (gamepad2.left_trigger && gamepad2.b)
-    private static final double SCORE_TEN_SHOULDER = SCORE_ONE_SHOULDER;
-    private static final double SCORE_TEN_WRIST = SCORE_ONE_WRIST;
-    private static final double SCORE_TEN_ELBOW = SCORE_ONE_ELBOW;
-    private static final double SCORE_TEN_LIFT = .66;
+    private static final double SCORE_TEN_SHOULDER = SCORE_EIGHT_SHOULDER;
+    private static final double SCORE_TEN_WRIST = SCORE_EIGHT_WRIST;
+    private static final double SCORE_TEN_ELBOW = SCORE_EIGHT_ELBOW;
+    private static final double SCORE_TEN_LIFT = SCORE_EIGHT_LIFT;
     // score position eleven button map (gamepad2.left_trigger && gamepad2.a)
-    private static final double SCORE_ELEVEN_SHOULDER = SCORE_ONE_SHOULDER;
-    private static final double SCORE_ELEVEN_WRIST = SCORE_ONE_WRIST;
-    private static final double SCORE_ELEVEN_ELBOW = SCORE_ONE_ELBOW;
-    private static final double SCORE_ELEVEN_LIFT = .66;
+    private static final double SCORE_ELEVEN_SHOULDER = SCORE_EIGHT_SHOULDER;
+    private static final double SCORE_ELEVEN_WRIST = SCORE_EIGHT_WRIST;
+    private static final double SCORE_ELEVEN_ELBOW = SCORE_EIGHT_ELBOW;
+    private static final double SCORE_ELEVEN_LIFT = SCORE_EIGHT_LIFT;
 
     public static final double SCORE_DOUBLE_SHOULDER = 0.916;
     public static final double SCORE_DOUBLE_WRIST = 0.84;
@@ -183,7 +192,7 @@ public class Evolution extends LinearOpMode {
         MOVING_WRIST,
         MOVING_ELBOW,
         MOVING_CLAWS,
-        COMPLETED
+        START_MOVING, COMPLETED
     }
 
     private intakeState currentIntakeState = intakeState.IDLE;
@@ -210,6 +219,7 @@ public class Evolution extends LinearOpMode {
 
     private void handleIntakeSequence(IntakePosition intakePos) {
         switch (currentIntakeState) {
+            case START_MOVING:
             case MOVING_SHOULDER:
                 // Move the shoulder to intake position
                 moveServoWithTrapezoidalVelocity(shoulder, intakePos.shoulderPosition, intakePos.accelerationMax, intakePos.velocityMax);
@@ -228,8 +238,8 @@ public class Evolution extends LinearOpMode {
                 break;
             case MOVING_ELBOW:
                 // Move the elbow to intake position so it don't slap the floor
-                moveServoGradually(elbow, intakePos.elbowPosition);
-                // moveServoWithTrapezoidalVelocity(elbow, intakePos.elbowPosition, intakePos.accelerationMax, intakePos.velocityMax);
+                // moveServoWith(elbow, intakePos.elbowPosition);
+                moveServoWithTrapezoidalVelocity(elbow, intakePos.elbowPosition, intakePos.accelerationMax, intakePos.velocityMax);
                 if (isServoAtPosition(elbow, intakePos.elbowPosition, SERVO_TOLERANCE)) {
                     // Check if the elbow is 70% down and open the claws if it is
                     currentIntakeState = intakeState.MOVING_CLAWS;
@@ -244,12 +254,12 @@ public class Evolution extends LinearOpMode {
                 }
                 break;
             case COMPLETED:
-                inIntakePos = true;
                 // Sequence complete, reset the state or perform additional actions
                 break;
         }
         // Check to reset the state to IDLE outside the switch
         if (currentIntakeState == intakeState.COMPLETED) {
+            inIntakePos = true;
             currentIntakeState = intakeState.IDLE;
         }
     }
@@ -259,10 +269,10 @@ public class Evolution extends LinearOpMode {
         // claw intake from floor
         //TODO: add saftey
         if (gamepad1.left_bumper && currentIntakeState == intakeState.IDLE) {
-            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            activeIntakePosition = new IntakePosition(LIFT_DRIVE, SHOULDER_DRIVE, WRIST_INTAKE, ELBOW_INTAKE, SUPER_ACC, SUPER_VEL);
-            currentIntakeState = intakeState.MOVING_SHOULDER;
+                leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                activeIntakePosition = new IntakePosition(LIFT_DRIVE, SHOULDER_INTAKE, WRIST_INTAKE, ELBOW_INTAKE, HIGH_ACC, HIGH_VEL);
+                currentIntakeState = intakeState.MOVING_SHOULDER;
         }
         // claw intake the top 2 from a stack of 5
         if (gamepad1.b && currentIntakeState == intakeState.IDLE) {
@@ -317,24 +327,23 @@ public class Evolution extends LinearOpMode {
     }
 
     private void autoClose() {
-        if (distanceL.getDistance(DistanceUnit.CM) < DistanceDetection) {
+        if (distanceL.getDistance(DistanceUnit.CM) < DistanceDetection && inIntakePos == true) {
             leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM );
         }
 
-        if (distanceR.getDistance(DistanceUnit.CM) < DistanceDetection) {
+        if (distanceR.getDistance(DistanceUnit.CM) < DistanceDetection && inIntakePos == true) {
             rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM );
 
         }
     }
-
     private void autoTuck() {
         if (distanceL.getDistance(DistanceUnit.CM) < DistanceDetection && distanceR.getDistance(DistanceUnit.CM) < DistanceDetection && inIntakePos == true && tuckPreparing == false) {
             tuckPreparing = true;
             tuckTimer.reset();
         }
-        if (tuckTimer.seconds() > 1.0 && tuckPreparing == true) {
+        if (tuckTimer.seconds() > .3 && tuckPreparing == true) {
             if (inIntakePos == true) {
                 activeDrivePosition = new DrivePosition(LIFT_DRIVE, SHOULDER_DRIVE, WRIST_DRIVE, ELBOW_DRIVE, SUPER_ACC, SUPER_VEL);
                 currentDriveState = driveState.MOVING_LIFT;
@@ -350,14 +359,7 @@ public class Evolution extends LinearOpMode {
                 leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 setLiftPosition(LIFT_DRIVE);
-                currentDriveState = driveState.MOVING_SHOULDER;
-                break;
-            case MOVING_SHOULDER:
-                // Move the shoulder to intake position
-                moveServoWithTrapezoidalVelocity(shoulder, drivePos.shoulderPosition, drivePos.accelerationMax, drivePos.velocityMax);
-                if (isServoAtPosition(shoulder, drivePos.shoulderPosition, SERVO_TOLERANCE)) {
-                    currentDriveState = driveState.MOVING_ELBOW;
-                }
+                currentDriveState = driveState.MOVING_ELBOW;
                 break;
             case MOVING_ELBOW:
                 // Move the elbow to intake position so it don't slap the floor
@@ -372,16 +374,24 @@ public class Evolution extends LinearOpMode {
                 // Move the wrist to intake position
                 moveServoWithTrapezoidalVelocity(wrist, drivePos.wristPosition, drivePos.accelerationMax, drivePos.velocityMax);
                 if (isServoAtPosition(wrist, drivePos.wristPosition, SERVO_TOLERANCE)) {
+                    currentDriveState = driveState.MOVING_SHOULDER;
+                }
+                break;
+            case MOVING_SHOULDER:
+                // Move the shoulder to intake position
+                moveServoWithTrapezoidalVelocity(shoulder, drivePos.shoulderPosition, drivePos.accelerationMax, drivePos.velocityMax);
+                if (isServoAtPosition(shoulder, drivePos.shoulderPosition, SERVO_TOLERANCE)) {
                     currentDriveState = driveState.COMPLETED;
                 }
                 break;
             case COMPLETED:
-                inIntakePos = false;
+
                 // Sequence complete, reset the state or perform additional actions
                 break;
         }
         // Check to reset the state to IDLE outside the switch
         if (currentDriveState == driveState.COMPLETED) {
+            inIntakePos = false;
             currentDriveState = driveState.IDLE;
         }
     }
@@ -469,12 +479,13 @@ public class Evolution extends LinearOpMode {
                 }
                 break;
             case COMPLETED:
-                inIntakePos = false;
+
                 // Sequence complete, reset the state or perform additional actions
                 break;
         }
         // Check to reset the state to IDLE outside the switch
         if (currentScoreState == scoreState.COMPLETED) {
+            inIntakePos = false;
             currentScoreState = scoreState.IDLE;
         }
     }
@@ -874,6 +885,7 @@ public class Evolution extends LinearOpMode {
             telemetry.addData("Mecanum Thread Running", mecanumDriveRunnable.running);
             telemetry.addData("Loop Time", "Duration: " + runtime.milliseconds() + " ms");
 
+            */
 
             telemetry.addData("Status", "Run " + runtime.toString());
             telemetry.addData("Intake", currentIntakeState);
@@ -884,7 +896,9 @@ public class Evolution extends LinearOpMode {
             telemetry.addData("Elbow Position", elbow.getPosition());
             telemetry.addData("Lift Left", leftLift.getPosition());
             telemetry.addData("Lift Right", rightLift.getPosition());
-            */
+            telemetry.addData("IntakePos", inIntakePos);
+            //telemetry.addData("tuckPreparing", tuckPreparing);
+
             //telemetry.addData("Left Lower", leftLower.isPressed() ? "Pressed" : "Not Pressed");
             //telemetry.addData("Left Upper", leftUpper.isPressed() ? "Pressed" : "Not Pressed");
             //telemetry.addData("Right Lower", rightLower.isPressed() ? "Pressed" : "Not Pressed");
@@ -905,7 +919,7 @@ public class Evolution extends LinearOpMode {
             // emergency stop slides
             emergencyStop();
             autoClose();
-            //autoTuck();
+            autoTuck();
             // mecanum drive
             //driveCode(); say what
             telemetry.update();
