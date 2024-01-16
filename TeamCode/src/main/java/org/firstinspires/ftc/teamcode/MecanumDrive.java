@@ -70,21 +70,21 @@ public final class MecanumDrive {
         //TODO Step 6 (Only for DriveEncoder Localizer) Set value of lateralInPerTick after running LateralPushTest
         //TODO Step 8 (Only for DeadWheel Localizer) Set value of lateralInPerTick after running LateralRampLogger
         //TODO Step 14 Make value of lateralInPerTick accurate after running LocalizationTest
-        public double lateralInPerTick = 0.0022020924985270075;
+        public double lateralInPerTick = 0.002209854425330719; // 0.0022252767807060007; // 0.002189824474125124; // old 0.0022020924985270075;
 
         //TODO Step 10 (Only for DriveEncoder Localizer) Set value of trackWidthTicks after running AngularRampLogger
         //TODO Step 11 (Only for DeadWheel Localizer) Set value of trackWidthTicks after running AngularRampLogger
         //      Go to Step 11.1 in Three or Two DeadWheelLocalizer and updated  values of par0YTicks, part1YTicks, perpXTicks
-        public double trackWidthTicks = 4798.620303059225;
+        public double trackWidthTicks = 4835.904987105403; //4798.620303059225;
 
         // feedforward parameters (in tick units)
         //TODO Step 7 (Only for DeadWheel Localizer) Set value for kS and KV after running ForwardRampLogger
         //TODO Step 9 (Only for DriveEncoder Localizer) Set value for kS and kV after running AngularRampLogger
-        public double kS = 0.8968261957443961;
-        public double kV = 0.0005749704182258454;
+        public double kS = 0.9283757461218212; // removing start 0.87862688110546830; // old .8968261957443961 // not removing start 0.7586767545861255
+        public double kV = 0.0005718476041032446; // removing start 0.0005785996057500679; //0.0005749704182258454 // not removing start 0.0005937466858750417
         //TODO Step 12 Set value of kA after running ManualFeedforwardTuner.
         //   In this emperical process update value in increments of 0.0001 for drive encoders and 0.00001 for dead-wheel encoders
-        public double kA = 0.0001;
+        public double kA = 0.00006;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -97,9 +97,9 @@ public final class MecanumDrive {
 
         // path controller gains
         //TODO Step 13 Set value of Gains after running ManualFeedbackTuner
-        public double axialGain = 5.5;
+        public double axialGain = 6;
         public double lateralGain = 8;
-        public double headingGain = 20; // shared with turn
+        public double headingGain = 10; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
