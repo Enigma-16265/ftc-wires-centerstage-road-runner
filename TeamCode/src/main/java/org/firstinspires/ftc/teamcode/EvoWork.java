@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
-public class EvoWorkulation extends LinearOpMode {
+public class EvoWork extends LinearOpMode {
 
     // Declare vars
     // timers
@@ -56,15 +56,15 @@ public class EvoWorkulation extends LinearOpMode {
 
     ElapsedTime tuckTimer = new ElapsedTime();
 
-    private static final double LOW_ACC = 7.25;
-    private static final double LOW_VEL = 8.5;
-    private static final double MED_ACC = 10.25;
-    private static final double MED_VEL = 11.5;
-    private static final double HIGH_ACC = 11.25;
-    private static final double HIGH_VEL = 13.5;
+    public static final double LOW_ACC = 7.25;
+    public static final double LOW_VEL = 8.5;
+    public static final double MED_ACC = 10.25;
+    public static final double MED_VEL = 11.5;
+    public static final double HIGH_ACC = 11.25;
+    public static final double HIGH_VEL = 13.5;
 
-    private static final double SUPER_ACC = 20.0;
-    private static final double SUPER_VEL = 22.0;
+    public static final double SUPER_ACC = 20.0;
+    public static final double SUPER_VEL = 22.0;
 
 
     // servo values
@@ -91,7 +91,14 @@ public class EvoWorkulation extends LinearOpMode {
 
     // stack positions (top 2 o 5 and next 2 of 3 )
     // TODO find positions with McMuffin (currently all set to drive) change to the actual double values like above from McMuffin
+
     // intake two off a stack of five
+    // Arm position for grabbing the single top pixel from a stack
+    private static final double SHOULDER_TOP_ONE = 0.31;
+    private static final double WRIST_TOP_ONE = 0.35;
+    private static final double ELBOW_TOP_ONE = 0.79;
+
+    // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
     public static final double WRIST_TOP_TWO = 0.495;
     public static final double ELBOW_TOP_TWO = 0.79;
@@ -106,6 +113,13 @@ public class EvoWorkulation extends LinearOpMode {
     //=^-^=
     // score positions (11 rows on the board)
     // TODO find positions with McMuffin (currently all set to drive) change to the actual double values like above from McMuffin
+
+    // Arm position for scoring pixel from the stack with the wrist in the upright position
+    public static final double SCORING_UPRIGHT_WRIST = 0.735;
+    public static final double SCORING_UPRIGHT_SHOULDER = 0.926;
+    public static final double SCORING_UPRIGHT_ELBOW = 0.66;
+    public static final double SCORING_RIGHT_FINGER = 0.25;
+    public static final double SCORING_LEFT_FINGER = 0.25;
 
     // score zero only used for that first yellow pixel in auto
     public static final double SCORE_ZERO_SHOULDER = 0.936;

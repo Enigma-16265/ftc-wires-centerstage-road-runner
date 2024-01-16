@@ -56,7 +56,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * ENIGMA Autonomous for with vision detection using EasyOpenCv and park
  */
 @Autonomous(name = "EGG AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
-public class EggAuto extends LinearOpMode {
+public class EvoTrajAuto extends LinearOpMode {
 
     public static String TEAM_NAME = "ENIGMA"; //TODO: Enter team Name
     public static int TEAM_NUMBER = 16265; //TODO: Enter team Number
@@ -77,41 +77,6 @@ public class EggAuto extends LinearOpMode {
     double LiftHeight;
 
     // Drive position for the arm
-    private static final double LIFT_DRIVE = EvoWork.LIFT_DRIVE;
-    private static final double SHOULDER_DRIVE =  EvoWork.SHOULDER_DRIVE;
-    private static final double ELBOW_DRIVE = EvoWork.ELBOW_DRIVE;
-    private static final double ELBOW_INTAKE = EvoWork.ELBOW_INTAKE;
-    private static final double WRIST_INTAKE = EvoWork.WRIST_INTAKE;
-
-    public static final double LEFT_FINGER_GRIP = EvoWork.LEFT_FINGER_GRIP;
-    public static final double RIGHT_FINGER_GRIP = EvoWork.RIGHT_FINGER_GRIP;
-    public static final double LEFT_FINGER_INTAKE = EvoWork.LEFT_FINGER_INTAKE;
-    public static final double RIGHT_FINGER_INTAKE = EvoWork.RIGHT_FINGER_INTAKE;
-    public static final double LEFT_FINGER_DROP = EvoWork.LEFT_FINGER_DROP;
-    public static final double RIGHT_FINGER_DROP = EvoWork.RIGHT_FINGER_DROP;
-    private static final double SCORING_RIGHT_FINGER = EvoWork.SCORING_RIGHT_FINGER;
-    private static final double SCORING_LEFT_FINGER = EvoWork.SCORING_LEFT_FINGER;
-
-    // Place pixel on the lowest level
-    private static final double SCORE_ZERO_SHOULDER = EvoWork.SCORE_ZERO_SHOULDER;
-    private static final double SCORE_ZERO_WRIST = EvoWork.SCORE_ZERO_WRIST;
-    private static final double SCORE_ZERO_ELBOW = EvoWork.SCORE_ZERO_ELBOW;
-
-    // Arm position for scoring pixel from the stack with the wrist in the upright position
-    private static final double SCORING_WRIST = EvoWork.SCORING_UPRIGHT_WRIST;
-    private static final double SCORING_SHOULDER = EvoWork.SCORING_UPRIGHT_SHOULDER;
-    private static final double SCORING_ELBOW = EvoWork.SCORING_UPRIGHT_ELBOW;
-
-    // Arm position for grabbing the top two pixels from a stack
-    public static final double SHOULDER_TOP_TWO = EvoWork.SHOULDER_TOP_TWO;
-    public static final double WRIST_TOP_TWO = EvoWork.WRIST_TOP_TWO;
-    public static final double ELBOW_TOP_TWO = EvoWork.ELBOW_TOP_TWO;
-
-    // Arm position for grabbing the single top pixel from a stack
-    private static final double SHOULDER_TOP_ONE = 0.31;
-    private static final double WRIST_TOP_ONE = 0.35;
-    private static final double ELBOW_TOP_ONE = 0.79;
-
     private static final double WAIT_ONE_SEC = 1; // 1000 milliseconds
     private static final double WAIT_HALF_SEC = 0.5; // 500 milliseconds
     private static final double WAIT_QUARTER_SEC = 0.25; // 250 milliseconds
@@ -206,13 +171,17 @@ public class EggAuto extends LinearOpMode {
 
 
         //init pos
-        setLiftPosition(LIFT_DRIVE);
-        shoulder.setPosition(SHOULDER_DRIVE);
-        wrist.setPosition(WRIST_INTAKE);
-        elbow.setPosition(ELBOW_DRIVE);
+        setLiftPosition(EvoWork.LIFT_DRIVE);
+        shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
+        wrist.setPosition(EvoWork.WRIST_INTAKE);
+        elbow.setPosition(EvoWork.ELBOW_DRIVE);
         sleep(3500);
-        leftFinger.setPosition(LEFT_FINGER_GRIP);
-        rightFinger.setPosition(RIGHT_FINGER_GRIP);
+        leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
+        rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
+
+        ArmController armController = new ArmController(shoulder, elbow, wrist, leftFinger, rightFinger);
+        Thread armThread = new Thread(armController);
+        armThread.start();
 
         // Vision OpenCV / Color Detection
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -253,16 +222,20 @@ public class EggAuto extends LinearOpMode {
 
         //Game Play Button  is pressed
         if (opModeIsActive() && !isStopRequested()) {
+
             //Build trajectories based on the target location detected by vision
             runAutonoumousMode();
         }
+
+        armController.stop();
+        armThread.join(); // Ensure the thread finishes execution
     }   // end runOpMode()
     public void runAutonoumousMode() {
         //Initialize Pose2d as desired
         Pose2d initPose = new Pose2d(0, 0, 0); // Starting Pose
         Pose2d moveBeyondTrussPose = new Pose2d(0,0,0);
         Pose2d dropPurplePixelPose = new Pose2d(0, 0, 0);
-        Pose2d midwayPose1 = new Pose2d(0,0,0);
+        Pose2d midwayPose1 = new Pose2d(0,0,0); // after placing pixel
         Pose2d scorePose1 = new Pose2d(0,0,0);
         Pose2d scorePose1a = new Pose2d(0,0,0);
         Pose2d intakeStack = new Pose2d(0,0,0);
@@ -280,6 +253,15 @@ public class EggAuto extends LinearOpMode {
         //TODO: edit here
         switch (startPosition) {
             case BLUE_LEFT:
+/*
+                   | +y
+                ________
+                |>>>>
+        <- -x   |>>>>    -> +x
+                |>>>>
+                --------
+                   | -y
+*/
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
@@ -307,6 +289,15 @@ public class EggAuto extends LinearOpMode {
                 break;
 
             case RED_RIGHT:
+/*
+                   | +y
+                ________
+                   <<<<|
+        <- +x      <<<<|   -> -x
+                   <<<<|
+                --------
+                   | -y
+*/
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
@@ -328,6 +319,15 @@ public class EggAuto extends LinearOpMode {
                 break;
 
             case BLUE_RIGHT:
+/*
+                   | +y
+                ________
+                |>>>>
+        <- -x   |>>>>    -> +x
+                |>>>>
+                --------
+                   | -y
+*/
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
@@ -352,6 +352,15 @@ public class EggAuto extends LinearOpMode {
                 break;
 
             case RED_LEFT:
+/*
+                   | +y
+                ________
+                   <<<<|
+        <- +x      <<<<|   -> -x
+                   <<<<|
+                --------
+                   | -y
+*/
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
@@ -412,16 +421,16 @@ public class EggAuto extends LinearOpMode {
 
 
         //drop Pixel on Backdrop
-        safeWaitSeconds(.25);
+        safeWaitSeconds(WAIT_QUARTER_SEC);
         shoulder.setPosition(EvoWork.SCORE_ZERO_SHOULDER);
-        safeWaitSeconds(.25);
+        safeWaitSeconds(WAIT_QUARTER_SEC);
         wrist.setPosition(EvoWork.SCORE_ZERO_WRIST);
-        safeWaitSeconds(.25);
+        safeWaitSeconds(WAIT_QUARTER_SEC);
         elbow.setPosition(EvoWork.SCORE_ZERO_ELBOW);
-        safeWaitSeconds(.5);
+        safeWaitSeconds(WAIT_HALF_SEC);
         // drop yellow pixel
         leftFinger.setPosition(EvoWork.LEFT_FINGER_DROP);
-        safeWaitSeconds(.25);
+        safeWaitSeconds(WAIT_QUARTER_SEC);
         // return to drive
 
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
@@ -432,6 +441,7 @@ public class EggAuto extends LinearOpMode {
 
         if (startPosition == START_POSITION.BLUE_LEFT ||
                 startPosition == START_POSITION.RED_RIGHT) {
+
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(midwayPose1.position, midwayPose1.heading)
@@ -441,19 +451,19 @@ public class EggAuto extends LinearOpMode {
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeStack.position, intakeStack.heading)
                             .build());
-            safeWaitSeconds(.25);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_INTAKE);
-            safeWaitSeconds(.10);
+            safeWaitSeconds(WAIT_TENTH_SEC);
             shoulder.setPosition(EvoWork.SHOULDER_TOP_TWO);
-            safeWaitSeconds(.10);
+            safeWaitSeconds(WAIT_TENTH_SEC);
             wrist.setPosition(EvoWork.WRIST_TOP_TWO);
-            safeWaitSeconds(.50);
+            safeWaitSeconds(WAIT_HALF_SEC);
             elbow.setPosition(EvoWork.ELBOW_TOP_TWO);
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeprep.position, intakeprep.heading)
                             .build());
-            safeWaitSeconds(.50);
+            safeWaitSeconds(WAIT_HALF_SEC);
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
 
             // drive back to backboard and strafe to scoring position
@@ -467,21 +477,21 @@ public class EggAuto extends LinearOpMode {
                             .strafeToLinearHeading(intakeStack2.position, intakeStack2.heading)
                             .strafeToLinearHeading(scorePose1.position, scorePose1.heading)
                             .build());
-            wrist.setPosition(SCORING_WRIST);
-            safeWaitSeconds(.6);
-            shoulder.setPosition(SCORING_SHOULDER);
-            safeWaitSeconds(.6);
-            elbow.setPosition(SCORING_ELBOW);
-            safeWaitSeconds(.6);
+            wrist.setPosition(EvoWork.SCORING_UPRIGHT_WRIST);
+            safeWaitSeconds(WAIT_HALF_SEC);
+            shoulder.setPosition(EvoWork.SCORING_UPRIGHT_SHOULDER);
+            safeWaitSeconds(WAIT_HALF_SEC);
+            elbow.setPosition(EvoWork.SCORING_UPRIGHT_ELBOW);
+            safeWaitSeconds(WAIT_HALF_SEC);
             // drop first pixel
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_DROP);
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(scorePose1a.position, scorePose1a.heading)
                             .build());
-            safeWaitSeconds(.10);
+            safeWaitSeconds(WAIT_TENTH_SEC);
             // drop second pixel
-            //rightFinger.setPosition(EvoWork.RIGHT_FINGER_DROP);
+
             // return to drive
             shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
             elbow.setPosition(EvoWork.ELBOW_DRIVE);
@@ -613,4 +623,5 @@ public class EggAuto extends LinearOpMode {
             return (outPut);
         }
     }
+
 }   // end class
