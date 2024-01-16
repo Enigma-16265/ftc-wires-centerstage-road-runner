@@ -29,8 +29,67 @@ public class ArmController implements Runnable {
         this.opModeActive = active;
     }
 
+    // State machine for Claw Fingers
+    private enum ClawState { IDLE, MOVE_RIGHT_FINGER, MOVE_LEFT_FINGER, MOVE_BOTH_FINGERS, START_MOVING, COMPLETED }
+    private volatile ClawState currentClawState = ClawState.IDLE;
+    private ClawPosition activeClawPosition;
+
+    private boolean inClawPos = false;
+
+    static class ClawPosition {
+        double leftFingerPosition;
+        double rightFingerPosition;
+        double accelerationMax;
+        double velocityMax;
+
+        public ClawPosition(double leftFingerPos, double rightFingerPos,
+                             double accMax, double velMax) {
+            this.leftFingerPosition = leftFingerPos;
+            this.rightFingerPosition = rightFingerPos;
+            this.accelerationMax = accMax;
+            this.velocityMax = velMax;
+        }
+    }
+
+    private void handleClawSequence(ArmController.ClawPosition clawPos) {
+        switch (currentClawState) {
+            case START_MOVING:
+            case MOVE_LEFT_FINGER:
+                // Move the left finger position
+                leftFinger.setPosition(clawPos.leftFingerPosition);
+                currentClawState = ClawState.COMPLETED;
+                break;
+            case MOVE_RIGHT_FINGER:
+                // Move the right finger position
+                rightFinger.setPosition(clawPos.rightFingerPosition);
+                currentClawState = ClawState.COMPLETED;
+                break;
+            case MOVE_BOTH_FINGERS:
+                // Move the both finger positions
+                leftFinger.setPosition(clawPos.leftFingerPosition);
+                rightFinger.setPosition(clawPos.rightFingerPosition);
+                currentClawState = ClawState.COMPLETED;
+                break;
+            case COMPLETED:
+
+                // Sequence complete, reset the state or perform additional actions
+                break;
+        }
+        // Check to reset the state to IDLE outside the switch
+        if (currentClawState == ClawState.COMPLETED) {
+            inClawPos = false;
+            currentClawState = ClawState.IDLE;
+            activeClawPosition = null; // Reset the active position
+        }
+    }
+
+    public void DropPurple() {
+        activeClawPosition = new ClawPosition(EvoWork.LEFT_FINGER_GRIP, EvoWork.RIGHT_FINGER_DROP, EvoWork.HIGH_ACC, EvoWork.HIGH_VEL);
+        currentClawState = ClawState.MOVE_BOTH_FINGERS;
+    }
+
     // State machine for Scoring
-    private enum ScoreState { IDLE, MOVING_SHOULDER, MOVING_WRIST, MOVING_ELBOW, MOVING_CLAWS, START_MOVING, COMPLETED }
+    private enum ScoreState { IDLE, MOVING_SHOULDER, MOVING_WRIST, MOVING_ELBOW, START_MOVING, COMPLETED }
     private volatile ScoreState currentScoreState = ScoreState.IDLE;
     private ScorePosition activeScorePosition;
 
@@ -97,7 +156,7 @@ public class ArmController implements Runnable {
         }
     }
 
-    public void startScore() {
+    public void ScoreYellow() {
         activeScorePosition = new ScorePosition(EvoWork.SHOULDER_DRIVE, EvoWork.ELBOW_DRIVE, EvoWork.WRIST_DRIVE, EvoWork.LEFT_FINGER_GRIP, EvoWork.RIGHT_FINGER_GRIP, EvoWork.HIGH_ACC, EvoWork.HIGH_VEL);
         currentScoreState = ScoreState.MOVING_SHOULDER;
     }
@@ -233,12 +292,9 @@ public class ArmController implements Runnable {
                 }
                 break;
             case MOVING_CLAWS:
-                leftFinger.setPosition(EvoWork.LEFT_FINGER_INTAKE);
-                rightFinger.setPosition(EvoWork.RIGHT_FINGER_INTAKE);
-                if (isServoAtPosition(leftFinger, EvoWork.LEFT_FINGER_INTAKE, EvoWork.SERVO_TOLERANCE) || isServoAtPosition(rightFinger, EvoWork.RIGHT_FINGER_INTAKE, EvoWork.SERVO_TOLERANCE)) {
-                    // Check if the elbow is 70% down and open the claws if it is
+                leftFinger.setPosition(intakePos.leftFingerPosition);
+                rightFinger.setPosition(intakePos.rightFingerPosition);
                     currentIntakeState = IntakeState.COMPLETED;
-                }
                 break;
             case COMPLETED:
                 // Sequence complete, reset the state or perform additional actions
@@ -252,8 +308,8 @@ public class ArmController implements Runnable {
         }
     }
 
-    public void startFloorIntake() {
-        activeIntakePosition = new IntakePosition(EvoWork.SHOULDER_INTAKE, EvoWork.ELBOW_INTAKE, EvoWork.WRIST_INTAKE, EvoWork.LEFT_FINGER_INTAKE, EvoWork.RIGHT_FINGER_INTAKE, EvoWork.HIGH_ACC, EvoWork.HIGH_VEL);
+    public void StartIntake() {
+        activeIntakePosition = new IntakePosition(EvoWork.SHOULDER_DRIVE, EvoWork.ELBOW_INTAKE, EvoWork.WRIST_INTAKE, EvoWork.LEFT_FINGER_GRIP, EvoWork.RIGHT_FINGER_GRIP, EvoWork.HIGH_ACC, EvoWork.HIGH_VEL);
         currentIntakeState = IntakeState.MOVING_SHOULDER;
     }
 
@@ -265,6 +321,8 @@ public class ArmController implements Runnable {
         activeIntakePosition = new IntakePosition(EvoWork.SHOULDER_INTAKE, EvoWork.ELBOW_TOP_TWO, EvoWork.WRIST_TOP_TWO, EvoWork.RIGHT_FINGER_GRIP, EvoWork.LEFT_FINGER_INTAKE, EvoWork.HIGH_ACC, EvoWork.HIGH_VEL);
         currentIntakeState = IntakeState.MOVING_SHOULDER;
     }
+
+
 
     // Target positions for each servo
     private boolean isServoAtPosition(Servo servo, double targetPosition, double tolerance) {
@@ -331,7 +389,15 @@ public class ArmController implements Runnable {
             servoTimer.reset();
         }
     }
+    public boolean isActionCompleted() {
+        // Check if each state machine is either in the COMPLETED state or IDLE
+        boolean clawCompleted = (currentClawState == ClawState.COMPLETED || currentClawState == ClawState.IDLE);
+        boolean scoreCompleted = (currentScoreState == ScoreState.COMPLETED || currentScoreState == ScoreState.IDLE);
+        boolean driveCompleted = (currentDriveState == DriveState.COMPLETED || currentDriveState == DriveState.IDLE);
+        boolean intakeCompleted = (currentIntakeState == IntakeState.COMPLETED || currentIntakeState == IntakeState.IDLE);
 
+        return clawCompleted && scoreCompleted && driveCompleted && intakeCompleted;
+    }
     public void stop() {
         running = false;
     }
@@ -347,6 +413,18 @@ public class ArmController implements Runnable {
             // Check and handle the current intake sequence
             if (activeIntakePosition != null) {
                 handleIntakeSequence(activeIntakePosition);
+            }
+            // Check and handle the current drive sequence
+            if (activeDrivePosition != null) {
+                handleDriveSequence(activeDrivePosition);
+            }
+            // Check and handle the current score sequence
+            if (activeScorePosition != null) {
+                handleScoreSequence(activeScorePosition);
+            }
+            // Check and handle the current claw sequence
+            if (activeClawPosition != null) {
+                handleClawSequence(activeClawPosition);
             }
             // Small sleep to prevent this loop from consuming too much CPU
             try {

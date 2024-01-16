@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp
+//@TeleOp
 public class Evolution extends LinearOpMode {
 
     // Declare vars

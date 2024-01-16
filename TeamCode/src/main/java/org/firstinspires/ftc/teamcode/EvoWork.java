@@ -79,9 +79,11 @@ public class EvoWork extends LinearOpMode {
     public static final double WRIST_INTAKE = 0.476;
     public static final double LEFT_FINGER_GRIP = 0.64;
     public static final double LEFT_FINGER_DROP = .9;
+    public static final double LEFT_FINGER_PLOP = .77;
     public static final double LEFT_FINGER_INTAKE = 1;
     public static final double RIGHT_FINGER_GRIP = .33;
     public static final double RIGHT_FINGER_DROP = 0.1;
+    public static final double RIGHT_FINGER_PLOP = 0.219;
     public static final double RIGHT_FINGER_INTAKE = 0;
     public static final double TRIGGER_THRESHOLD = 0.5;
     public static final double LAUNCHER_START_POS = 0.8;
@@ -100,8 +102,8 @@ public class EvoWork extends LinearOpMode {
 
     // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
-    public static final double WRIST_TOP_TWO = 0.495;
-    public static final double ELBOW_TOP_TWO = 0.79;
+    public static final double WRIST_TOP_TWO = 0.505;
+    public static final double ELBOW_TOP_TWO = 0.78;
 
     // intake two off a stack of three
     public static final double SHOULDER_NEXT_TWO = 0.425;

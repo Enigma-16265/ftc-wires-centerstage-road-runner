@@ -32,6 +32,8 @@ package org.firstinspires.ftc.teamcode;
 import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.TrajectoryBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -55,8 +57,8 @@ import org.openftc.easyopencv.OpenCvPipeline;
 /**
  * ENIGMA Autonomous for with vision detection using EasyOpenCv and park
  */
-//@Autonomous(name = "EGG AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
-public class EvoTrajAuto extends LinearOpMode {
+//@Autonomous(name = "SIMPLE AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
+public class SimpleAuto extends LinearOpMode {
 
     public static String TEAM_NAME = "ENIGMA"; //TODO: Enter team Name
     public static int TEAM_NUMBER = 16265; //TODO: Enter team Number
@@ -175,7 +177,7 @@ public class EvoTrajAuto extends LinearOpMode {
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         wrist.setPosition(EvoWork.WRIST_INTAKE);
         elbow.setPosition(EvoWork.ELBOW_DRIVE);
-        sleep(3500);
+        sleep(3000);
         leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
         rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
 
@@ -224,13 +226,13 @@ public class EvoTrajAuto extends LinearOpMode {
         if (opModeIsActive() && !isStopRequested()) {
 
             //Build trajectories based on the target location detected by vision
-            runAutonoumousMode();
+            runAutonoumousMode(armController);
         }
 
         armController.stop();
         armThread.join(); // Ensure the thread finishes execution
     }   // end runOpMode()
-    public void runAutonoumousMode() {
+    public void runAutonoumousMode(ArmController armController) {
         //Initialize Pose2d as desired
         Pose2d initPose = new Pose2d(0, 0, 0); // Starting Pose
         Pose2d moveBeyondTrussPose = new Pose2d(0,0,0);
@@ -384,6 +386,7 @@ public class EvoTrajAuto extends LinearOpMode {
                 break;
         }
 
+        /*
         // Position claw to drop the Purple Pixel on Spike Mark
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         wrist.setPosition(EvoWork.WRIST_INTAKE);
@@ -391,18 +394,26 @@ public class EvoTrajAuto extends LinearOpMode {
             moveServoGradually(elbow, EvoWork.ELBOW_INTAKE);
             safeWaitSeconds(WAIT_TWELFTH_SEC);
         }
+        */
 
+
+        armController.StartIntake();
+        while (!armController.isActionCompleted()) {
+            // Add a small delay to prevent tight looping
+            sleep(10);
+            // Optionally add telemetry here to debug
+            telemetry.addData("Waiting for Action Completion", "");
+            telemetry.update();
+        }
         //Move robot to dropPurplePixel based on identified Spike Mark Location
         Actions.runBlocking(
                 drive.actionBuilder(drive.pose)
                         .strafeToLinearHeading(moveBeyondTrussPose.position, moveBeyondTrussPose.heading)
                         .strafeToLinearHeading(dropPurplePixelPose.position, dropPurplePixelPose.heading)
                         .build());
-
-        safeWaitSeconds(.01);
-        rightFinger.setPosition(EvoWork.RIGHT_FINGER_DROP);
-        safeWaitSeconds(.05);
-
+        armController.DropPurple();
+        armController.startDrive();
+/*
         // prep to drive to the board
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         elbow.setPosition(EvoWork.ELBOW_DRIVE);
@@ -505,6 +516,7 @@ public class EvoTrajAuto extends LinearOpMode {
                             .strafeToLinearHeading(intakeStack.position, intakeStack.heading)
                             .build());
         }
+        */
     }
 
 

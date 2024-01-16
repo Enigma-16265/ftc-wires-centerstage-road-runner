@@ -55,7 +55,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 /**
  * ENIGMA Autonomous for with vision detection using EasyOpenCv and park
  */
-@Autonomous(name = "EGG AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
+//@Autonomous(name = "EGG AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
 public class EggAuto extends LinearOpMode {
 
     public static String TEAM_NAME = "ENIGMA"; //TODO: Enter team Name
