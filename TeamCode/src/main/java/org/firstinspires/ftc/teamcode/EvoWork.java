@@ -103,7 +103,7 @@ public class EvoWork extends LinearOpMode {
     // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
     public static final double WRIST_TOP_TWO = 0.505;
-    public static final double ELBOW_TOP_TWO = 0.78;
+    public static final double ELBOW_TOP_TWO = 0.772;
 
     // intake two off a stack of three
     public static final double SHOULDER_NEXT_TWO = 0.425;

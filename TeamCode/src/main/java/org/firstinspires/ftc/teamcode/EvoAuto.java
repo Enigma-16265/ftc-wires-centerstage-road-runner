@@ -181,6 +181,11 @@ public class EvoAuto extends LinearOpMode {
         //init pos
         setLiftPosition(EvoWork.LIFT_DRIVE);
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
+        for(int c = 0; c<45; c++) {
+            moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+            safeWaitSeconds(.005);
+        }
+        //shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         wrist.setPosition(EvoWork.WRIST_INTAKE);
         elbow.setPosition(EvoWork.ELBOW_DRIVE);
         sleep(3500);
@@ -277,15 +282,15 @@ public class EvoAuto extends LinearOpMode {
                         dropYellowPixelPose = new Pose2d(31, 35.5, Math.toRadians(-90));
                         break;
                 }
-                midwayPose1 = new Pose2d(54, 35, Math.toRadians(-90));
-                intakeStack = new Pose2d(55, -55,Math.toRadians(-90));
-                intakeprep = new Pose2d(55, -64.5,Math.toRadians(-90));
-                intakeStack2 = new Pose2d(51.5, 35,Math.toRadians(-90));
-                scorePose1 = new Pose2d(30, 33,Math.toRadians(-90));
+                midwayPose1 = new Pose2d(54, 35, Math.toRadians(-90)); // strafe over
+                intakeStack = new Pose2d(54, -55,Math.toRadians(-90)); // drive to prep
+                intakeprep = new Pose2d(54, -64.4,Math.toRadians(-90)); // drive to stack
+                intakeStack2 = new Pose2d(54, 35,Math.toRadians(-90)); // drive back to board
+                scorePose1 = new Pose2d(30, 33,Math.toRadians(-90)); // strafe to score
                 scorePose1a = new Pose2d(30, 32,Math.toRadians(-90));
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 //used to be 2          ^  this goes for all of them
-                parkPose = new Pose2d(8, 30, Math.toRadians(-90));
+                parkPose = new Pose2d(50, 33, Math.toRadians(-90));
                 break;
 
             case RED_RIGHT:
@@ -423,7 +428,7 @@ public class EvoAuto extends LinearOpMode {
         wrist.setPosition(EvoWork.SCORE_ZERO_WRIST);
         safeWaitSeconds(WAIT_QUARTER_SEC);
         elbow.setPosition(EvoWork.SCORE_ZERO_ELBOW);
-        safeWaitSeconds(WAIT_HALF_SEC);
+        safeWaitSeconds(WAIT_ONE_SEC);
         // drop yellow pixel
         leftFinger.setPosition(EvoWork.LEFT_FINGER_DROP);
         safeWaitSeconds(WAIT_QUARTER_SEC);
@@ -443,12 +448,13 @@ public class EvoAuto extends LinearOpMode {
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeStack.position, intakeStack.heading)
                             .build());
-            safeWaitSeconds(WAIT_TENTH_SEC);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
             shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
-            safeWaitSeconds(WAIT_TENTH_SEC);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
             wrist.setPosition(EvoWork.WRIST_TOP_TWO);
             safeWaitSeconds(WAIT_QUARTER_SEC);
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_INTAKE);
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_INTAKE);
             safeWaitSeconds(WAIT_HALF_SEC);
             elbow.setPosition(EvoWork.ELBOW_TOP_TWO);
             Actions.runBlocking(
@@ -457,7 +463,7 @@ public class EvoAuto extends LinearOpMode {
                             .build());
             safeWaitSeconds(WAIT_ONE_SEC);
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
-
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
             // drive back to backboard and strafe to scoring position
             safeWaitSeconds(.2);
             drivearmpos();
@@ -475,6 +481,8 @@ public class EvoAuto extends LinearOpMode {
             safeWaitSeconds(WAIT_ONE_SEC);
             // drop first pixel
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_PLOP);
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_PLOP);
+            safeWaitSeconds(WAIT_ONE_SEC);
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(scorePose1a.position, scorePose1a.heading)
