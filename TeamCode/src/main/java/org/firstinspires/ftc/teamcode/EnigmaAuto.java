@@ -33,6 +33,7 @@ import static com.qualcomm.robotcore.util.ElapsedTime.Resolution.SECONDS;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -66,6 +67,9 @@ public class EnigmaAuto extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private ElapsedTime servoTimer = new ElapsedTime();
 
+    // rev blinkin driver
+    RevBlinkinLedDriver leftLEDSBlinkin;
+    RevBlinkinLedDriver rightLEDSBlinkin;
     private Servo rightLift;
     private Servo leftLift;
     private Servo shoulder;
@@ -180,6 +184,9 @@ public class EnigmaAuto extends LinearOpMode {
         shoulder.setDirection(Servo.Direction.REVERSE);
         wrist.setDirection(Servo.Direction.REVERSE);
 
+        // REV Blinkin
+        leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
+        rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
 
         //init pos
         setLiftPosition(Evolution.LIFT_DRIVE);
@@ -189,6 +196,8 @@ public class EnigmaAuto extends LinearOpMode {
         sleep(3500);
         leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
         rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
+        leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
         // Vision OpenCV / Color Detection
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -533,6 +542,8 @@ public class EnigmaAuto extends LinearOpMode {
                 drive.actionBuilder(drive.pose)
                         .strafeToLinearHeading(parkPose.position, parkPose.heading)
                         .build());
+        leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM );
+        rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_HEARTBEAT_MEDIUM );
     }
 
 

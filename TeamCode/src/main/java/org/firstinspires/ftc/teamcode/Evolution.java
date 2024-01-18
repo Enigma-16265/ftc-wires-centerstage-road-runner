@@ -280,8 +280,6 @@ public class Evolution extends LinearOpMode {
         // claw intake from floor
         //TODO: add saftey
         if (gamepad1.left_bumper && currentIntakeState == intakeState.IDLE) {
-            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             activeIntakePosition = new IntakePosition(LIFT_DRIVE, SHOULDER_INTAKE, WRIST_INTAKE, ELBOW_INTAKE, HIGH_ACC, HIGH_VEL);
             currentIntakeState = intakeState.MOVING_SHOULDER;
         }
@@ -349,6 +347,7 @@ public class Evolution extends LinearOpMode {
 
         }
     }
+
     private void autoTuck() {
         if (distanceL.getDistance(DistanceUnit.CM) < DistanceDetection && distanceR.getDistance(DistanceUnit.CM) < DistanceDetection && inIntakePos == true && tuckPreparing == false) {
             tuckPreparing = true;
@@ -408,8 +407,8 @@ public class Evolution extends LinearOpMode {
     private void drivingFunction() {
         // Check if the right bumper is pressed and the drive state is IDLE
         if (gamepad1.right_bumper && currentDriveState == driveState.IDLE) {
-            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             activeDrivePosition = new DrivePosition(LIFT_DRIVE, SHOULDER_DRIVE, WRIST_DRIVE, ELBOW_DRIVE, SUPER_ACC, SUPER_VEL);
 
             currentDriveState = driveState.MOVING_LIFT;
@@ -749,14 +748,14 @@ public class Evolution extends LinearOpMode {
         if (gamepad2.dpad_up  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             leftFinger.setPosition(LEFT_FINGER_DROP);
             rightFinger.setPosition(RIGHT_FINGER_DROP);
-            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         } else if (gamepad2.dpad_left && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             leftFinger.setPosition(LEFT_FINGER_DROP);
-            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         } else if (gamepad2.dpad_right  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             rightFinger.setPosition(RIGHT_FINGER_DROP);
-            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         } else if (gamepad2.dpad_down  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             leftFinger.setPosition(LEFT_FINGER_INTAKE);
             rightFinger.setPosition(RIGHT_FINGER_INTAKE);
@@ -860,8 +859,8 @@ public class Evolution extends LinearOpMode {
         elbow.setPosition(ELBOW_DRIVE);
         wrist.setPosition(WRIST_DRIVE);
         // Set both Blinkin LED Drivers to glow green initially
-        leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-        rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
         launcherstartPos();
 
