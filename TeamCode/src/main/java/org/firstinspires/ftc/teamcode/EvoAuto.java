@@ -55,7 +55,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 /**
  * ENIGMA Autonomous for with vision detection using EasyOpenCv and park
  */
-@Autonomous(name = "EVO AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
+//@Autonomous(name = "EVO AUTO", group = "00-Autonomous", preselectTeleOp = "EvoWork")
 public class EvoAuto extends LinearOpMode {
 
     public static String TEAM_NAME = "ENIGMA"; //TODO: Enter team Name
@@ -157,7 +157,10 @@ public class EvoAuto extends LinearOpMode {
     }
 
     private void drivearmpos(){
-        shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
+        for(int c = 0; c<30; c++) {
+            moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+            sleep(5);
+        }
         elbow.setPosition(EvoWork.ELBOW_DRIVE);
         leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
         rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
@@ -181,11 +184,6 @@ public class EvoAuto extends LinearOpMode {
         //init pos
         setLiftPosition(EvoWork.LIFT_DRIVE);
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
-        for(int c = 0; c<45; c++) {
-            moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
-            safeWaitSeconds(.005);
-        }
-        //shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         wrist.setPosition(EvoWork.WRIST_INTAKE);
         elbow.setPosition(EvoWork.ELBOW_DRIVE);
         sleep(3500);
@@ -246,6 +244,7 @@ public class EvoAuto extends LinearOpMode {
         Pose2d intakeStack = new Pose2d(0,0,0);
         Pose2d intakeStack2 = new Pose2d(0,0,0);
         Pose2d intakeprep = new Pose2d(0,0,0);
+        Pose2d intakegrab = new Pose2d(0,0,0);
         Pose2d midwayPose2 = new Pose2d(0,0,0);
         Pose2d dropYellowPixelPose = new Pose2d(0, 0, 0);
         Pose2d parkPose = new Pose2d(0,0, 0);
@@ -282,31 +281,34 @@ public class EvoAuto extends LinearOpMode {
                         dropYellowPixelPose = new Pose2d(31, 35.5, Math.toRadians(-90));
                         break;
                 }
+                /*
+                // 2+2 poses
                 midwayPose1 = new Pose2d(54, 35, Math.toRadians(-90)); // strafe over
                 intakeStack = new Pose2d(54, -55,Math.toRadians(-90)); // drive to prep
                 intakeprep = new Pose2d(54, -64.4,Math.toRadians(-90)); // drive to stack
                 intakeStack2 = new Pose2d(54, 35,Math.toRadians(-90)); // drive back to board
                 scorePose1 = new Pose2d(30, 33,Math.toRadians(-90)); // strafe to score
                 scorePose1a = new Pose2d(30, 32,Math.toRadians(-90));
+                */
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 //used to be 2          ^  this goes for all of them
-                parkPose = new Pose2d(50, 33, Math.toRadians(-90));
+                parkPose = new Pose2d(5, 33, Math.toRadians(-90));
                 break;
 
             case RED_RIGHT:
 /*
-                   | +y
+                   | -y
                 ________
                    <<<<|
         <- +x      <<<<|   -> -x
                    <<<<|
                 --------
-                   | -y
+                   | +y
 */
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
-                        dropPurplePixelPose = new Pose2d(21.75, 0, Math.toRadians(70));
+                        dropPurplePixelPose = new Pose2d(20.75, 0, Math.toRadians(60));
                         dropYellowPixelPose = new Pose2d(34.25, -35, Math.toRadians(90));
                         break;
                     case MIDDLE:
@@ -314,11 +316,11 @@ public class EvoAuto extends LinearOpMode {
                         dropYellowPixelPose = new Pose2d(27, -35,  Math.toRadians(90));
                         break;
                     case RIGHT:
-                        dropPurplePixelPose = new Pose2d(22, 0, Math.toRadians(-35));
-                        dropYellowPixelPose = new Pose2d(19.75, -35, Math.toRadians(90));
+                        dropPurplePixelPose = new Pose2d(16.27, -8.295, Math.toRadians(0));
+                        dropYellowPixelPose = new Pose2d(22, -35, Math.toRadians(90));
                         break;
                 }
-                midwayPose1 = new Pose2d(14, -13, Math.toRadians(45));
+                //midwayPose1 = new Pose2d(14, -13, Math.toRadians(45));
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 parkPose = new Pose2d(8, -30, Math.toRadians(90));
                 break;
@@ -344,52 +346,55 @@ public class EvoAuto extends LinearOpMode {
                         dropYellowPixelPose = new Pose2d(26, 83, Math.toRadians(-90));
                         break;
                     case RIGHT:
-                        dropPurplePixelPose = new Pose2d(22, 0, Math.toRadians(-35));
+                        dropPurplePixelPose = new Pose2d(17, -6.295, Math.toRadians(0));
                         dropYellowPixelPose = new Pose2d(31, 83, Math.toRadians(-90));
                         break;
                 }
-                midwayPose1 = new Pose2d(18, -21, Math.toRadians(-90));
-                intakeStack = new Pose2d(53.25, -20,Math.toRadians(-90));
-                intakeStack2 = new Pose2d(53.25, -15,Math.toRadians(-90));
-                midwayPose2 = new Pose2d(52, 62, Math.toRadians(-90));
+                midwayPose1 = new Pose2d(17, -19, Math.toRadians(-90));
+                intakeStack = new Pose2d(54, -19,Math.toRadians(-90));
+                intakeprep = new Pose2d(54, -12.5,Math.toRadians(-90));
+                intakegrab = new Pose2d(54, -15.75,Math.toRadians(-90));
+                intakeStack2 = new Pose2d(53.25, 80.4,Math.toRadians(-90)); // drive back to board
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 parkPose = new Pose2d(50, 84, Math.toRadians(-90));
                 break;
 
             case RED_LEFT:
 /*
-                   | +y
+                   | -y
                 ________
                    <<<<|
         <- +x      <<<<|   -> -x
                    <<<<|
                 --------
-                   | -y
+                   | +y
 */
                 drive = new MecanumDrive(hardwareMap, initPose);
                 switch(identifiedSpikeMarkLocation){
                     case LEFT:
-                        dropPurplePixelPose = new Pose2d(22, 0, Math.toRadians(70));
-                        dropYellowPixelPose = new Pose2d(34, -87.5, Math.toRadians(90));
+                        dropPurplePixelPose = new Pose2d(17, 14.295, Math.toRadians(0));
+                        dropYellowPixelPose = new Pose2d(32.5, -80, Math.toRadians(90));
                         break;
                     case MIDDLE:
                         dropPurplePixelPose = new Pose2d(23.25, 0, Math.toRadians(0));
-                        dropYellowPixelPose = new Pose2d(29, -87.5, Math.toRadians(90));
+                        dropYellowPixelPose = new Pose2d(29, -80, Math.toRadians(90));
                         break;
                     case RIGHT:
                         dropPurplePixelPose = new Pose2d(22, 0, Math.toRadians(-35));
-                        dropYellowPixelPose = new Pose2d(23, -87.5, Math.toRadians(90));
+                        dropYellowPixelPose = new Pose2d(23, -80, Math.toRadians(90));
                         break;
                 }
-                midwayPose1 = new Pose2d(18, 21, Math.toRadians(90));
-                intakeStack = new Pose2d(52, 19,Math.toRadians(90));
-                midwayPose2 = new Pose2d(52, -62, Math.toRadians(90));
+                midwayPose1 = new Pose2d(18, 23, Math.toRadians(90)); // move into strafe position
+                intakeStack = new Pose2d(48, 19,Math.toRadians(90)); // strafe to stack
+                intakeprep = new Pose2d(48, 11.25,Math.toRadians(90)); // intake prep
+                intakegrab = new Pose2d(48, 17.75,Math.toRadians(90)); // move to stack and grab
+                intakeStack2 = new Pose2d(52, -70.9,Math.toRadians(90)); // strafe back to board and drop
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 parkPose = new Pose2d(50, -84, Math.toRadians(90));
                 break;
         }
 
-        // Position claw to drop the Purple Pixel on Spike Mark
+        // Position intake claw to drop the Purple Pixel on Spike Mark
         shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
         wrist.setPosition(EvoWork.WRIST_INTAKE);
         for(int c = 0; c<44; c++) {
@@ -397,7 +402,7 @@ public class EvoAuto extends LinearOpMode {
             safeWaitSeconds(WAIT_TWOHUNDRED_SEC);
         }
 
-        //Move robot to dropPurplePixel based on identified Spike Mark Location
+        //Move robot to moveBeyondTrussPose and dropPurplePixel pose based on identified Spike Mark Location
         Actions.runBlocking(
                 drive.actionBuilder(drive.pose)
                         .strafeToLinearHeading(moveBeyondTrussPose.position, moveBeyondTrussPose.heading)
@@ -409,45 +414,146 @@ public class EvoAuto extends LinearOpMode {
         safeWaitSeconds(WAIT_TWELFTH_SEC);
 
         // prep to drive to the board
-        drivearmpos();
+        for(int c = 0; c<44; c++) {
+            moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+            safeWaitSeconds(.005);
+        }
+        elbow.setPosition(EvoWork.ELBOW_DRIVE);
+        leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
+        rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
+        wrist.setPosition(EvoWork.WRIST_DRIVE);
 
         safeWaitSeconds(waitSecondsBeforeDrop);
+        if (startPosition == START_POSITION.BLUE_RIGHT ||
+                startPosition == START_POSITION.RED_LEFT) {
+            // strafe over to line up with
+            Actions.runBlocking(
+                    drive.actionBuilder(drive.pose)
+                            .strafeToLinearHeading(midwayPose1.position, midwayPose1.heading)
+                            .strafeToLinearHeading(intakeStack.position, intakeStack.heading)
+                            .strafeToLinearHeading(intakeprep.position, intakeprep.heading)
+                            .build());
+            // prepare claw to grab top pixel
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            wrist.setPosition(EvoWork.WRIST_INTAKE);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            rightFinger.setPosition(EvoWork.RIGHT_FINGER_INTAKE);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            for (int c = 0; c < 44; c++) {
+                moveServoGradually(wrist, EvoWork.WRIST_TOP_ONE);
+                safeWaitSeconds(.005);
+            }
+            safeWaitSeconds(WAIT_HALF_SEC);
+            elbow.setPosition(EvoWork.ELBOW_TOP_ONE);
+            safeWaitSeconds(WAIT_ONE_SEC);
+            Actions.runBlocking(
+                    drive.actionBuilder(drive.pose)
+                            .strafeToLinearHeading(intakegrab.position, intakegrab.heading)
+                            .build());
+            safeWaitSeconds(WAIT_ONE_SEC);
+            rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
+            safeWaitSeconds(WAIT_ONE_SEC);
 
-        //Move robot to midwayPose2 and to dropYellowPixelPose
+            // return to drive
+            for (int c = 0; c < 200; c++) {
+                moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+                safeWaitSeconds(.005);
+            }
+            elbow.setPosition(EvoWork.ELBOW_DRIVE);
+            wrist.setPosition(EvoWork.WRIST_DRIVE);
+
+            Actions.runBlocking(
+                    drive.actionBuilder(drive.pose)
+                            .strafeToLinearHeading(intakeStack2.position, intakeStack2.heading)
+                            .strafeToLinearHeading(dropYellowPixelPose.position, dropYellowPixelPose.heading)
+                            .build());
+
+            //prepare arm drop Pixel on Backdrop
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            shoulder.setPosition(EvoWork.SCORE_ZERO_SHOULDER);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            wrist.setPosition(EvoWork.SCORE_ZERO_WRIST);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            elbow.setPosition(EvoWork.SCORE_ZERO_ELBOW);
+            safeWaitSeconds(WAIT_ONE_SEC +.25);
+
+            // drop both pixels
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_DROP);
+            rightFinger.setPosition(EvoWork.RIGHT_FINGER_DROP);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+
+            // return to drive
+            for (int c = 0; c < 200; c++) {
+                moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+                safeWaitSeconds(.005);
+            }
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
+            rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
+            elbow.setPosition(EvoWork.ELBOW_DRIVE);
+            wrist.setPosition(EvoWork.WRIST_DRIVE);
+
+        } else {
+
+            //Move robot to dropYellowPixelPose and to dropYellowPixelPose
+            Actions.runBlocking(
+                    drive.actionBuilder(drive.pose)
+                            .setReversed(true)
+                            .splineToLinearHeading(dropYellowPixelPose, 0)
+                            .build());
+
+
+            //prepare arm drop Pixel on Backdrop
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            shoulder.setPosition(EvoWork.SCORE_ZERO_SHOULDER);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            wrist.setPosition(EvoWork.SCORE_ZERO_WRIST);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+            elbow.setPosition(EvoWork.SCORE_ZERO_ELBOW);
+            safeWaitSeconds(WAIT_ONE_SEC + .25);
+
+            // drop yellow pixel
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_DROP);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
+
+            // return to drive
+            for (int c = 0; c < 200; c++) {
+                moveServoGradually(shoulder, EvoWork.SHOULDER_DRIVE);
+                safeWaitSeconds(.005);
+            }
+            elbow.setPosition(EvoWork.ELBOW_DRIVE);
+            leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
+            rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
+            wrist.setPosition(EvoWork.WRIST_DRIVE);
+
+        }
+
         Actions.runBlocking(
                 drive.actionBuilder(drive.pose)
-                        .setReversed(true)
-                        .splineToLinearHeading(dropYellowPixelPose,0)
+                        .strafeToLinearHeading(parkPose.position, parkPose.heading)
                         .build());
 
 
-        //drop Pixel on Backdrop
-        safeWaitSeconds(WAIT_QUARTER_SEC);
-        shoulder.setPosition(EvoWork.SCORE_ZERO_SHOULDER);
-        safeWaitSeconds(WAIT_QUARTER_SEC);
-        wrist.setPosition(EvoWork.SCORE_ZERO_WRIST);
-        safeWaitSeconds(WAIT_QUARTER_SEC);
-        elbow.setPosition(EvoWork.SCORE_ZERO_ELBOW);
-        safeWaitSeconds(WAIT_ONE_SEC);
-        // drop yellow pixel
-        leftFinger.setPosition(EvoWork.LEFT_FINGER_DROP);
-        safeWaitSeconds(WAIT_QUARTER_SEC);
-        // return to drive
-
-        drivearmpos();
-
+/*
         if (startPosition == START_POSITION.BLUE_LEFT ||
                 startPosition == START_POSITION.RED_RIGHT) {
 
+
+            //TODO : Code to intake pixel from stack
+            // strafe over to line up with
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(midwayPose1.position, midwayPose1.heading)
                             .build());
-            //TODO : Code to intake pixel from stack
+
+            // drive just short of pixel stack
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeStack.position, intakeStack.heading)
                             .build());
+
+            // prepare claw to grab top two pixels
             safeWaitSeconds(WAIT_QUARTER_SEC);
             shoulder.setPosition(EvoWork.SHOULDER_DRIVE);
             safeWaitSeconds(WAIT_QUARTER_SEC);
@@ -457,10 +563,14 @@ public class EvoAuto extends LinearOpMode {
             leftFinger.setPosition(EvoWork.LEFT_FINGER_INTAKE);
             safeWaitSeconds(WAIT_HALF_SEC);
             elbow.setPosition(EvoWork.ELBOW_TOP_TWO);
+
+            // drive forward to pixel stack
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeprep.position, intakeprep.heading)
                             .build());
+
+            // grab top two pixels
             safeWaitSeconds(WAIT_ONE_SEC);
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_GRIP);
             leftFinger.setPosition(EvoWork.LEFT_FINGER_GRIP);
@@ -468,21 +578,24 @@ public class EvoAuto extends LinearOpMode {
             safeWaitSeconds(.2);
             drivearmpos();
 
+            // drive back to align with board
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakeStack2.position, intakeStack2.heading)
                             .strafeToLinearHeading(scorePose1.position, scorePose1.heading)
                             .build());
+
+            // drop two pixels
             wrist.setPosition(EvoWork.SCORING_UPRIGHT_WRIST);
             safeWaitSeconds(WAIT_ONE_SEC);
             shoulder.setPosition(EvoWork.SCORING_UPRIGHT_SHOULDER);
             safeWaitSeconds(WAIT_ONE_SEC);
             elbow.setPosition(EvoWork.SCORING_UPRIGHT_ELBOW);
             safeWaitSeconds(WAIT_ONE_SEC);
-            // drop first pixel
             rightFinger.setPosition(EvoWork.RIGHT_FINGER_PLOP);
             leftFinger.setPosition(EvoWork.LEFT_FINGER_PLOP);
             safeWaitSeconds(WAIT_ONE_SEC);
+            // used if
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(scorePose1a.position, scorePose1a.heading)
@@ -491,11 +604,9 @@ public class EvoAuto extends LinearOpMode {
             // return to drive
             drivearmpos();
 
-            Actions.runBlocking(
-                    drive.actionBuilder(drive.pose)
-                            .strafeToLinearHeading(parkPose.position, parkPose.heading)
-                            .build());
+
         }
+        */
     }
 
 

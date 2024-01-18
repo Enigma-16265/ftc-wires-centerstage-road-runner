@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-//@TeleOp
+@TeleOp
 public class Evolution extends LinearOpMode {
 
     // Declare vars
@@ -42,9 +42,6 @@ public class Evolution extends LinearOpMode {
     RevBlinkinLedDriver leftLEDSBlinkin;
     RevBlinkinLedDriver rightLEDSBlinkin;
 
-    double intakePattern = 0.77; // Circle pattern
-    double allotherPattern = 0.97; // Solid glow
-    double offPattern = 0.15; // Black or off
     private DistanceSensor distanceL;
     private DistanceSensor distanceR;
     private double servoposition = 0.0;
@@ -56,15 +53,15 @@ public class Evolution extends LinearOpMode {
 
     ElapsedTime tuckTimer = new ElapsedTime();
 
-    private static final double LOW_ACC = 7.25;
-    private static final double LOW_VEL = 8.5;
-    private static final double MED_ACC = 10.25;
-    private static final double MED_VEL = 11.5;
-    private static final double HIGH_ACC = 11.25;
-    private static final double HIGH_VEL = 13.5;
+    public static final double LOW_ACC = 7.25;
+    public static final double LOW_VEL = 8.5;
+    public static final double MED_ACC = 10.25;
+    public static final double MED_VEL = 11.5;
+    public static final double HIGH_ACC = 11.25;
+    public static final double HIGH_VEL = 13.5;
 
-    private static final double SUPER_ACC = 20.0;
-    private static final double SUPER_VEL = 22.0;
+    public static final double SUPER_ACC = 20.0;
+    public static final double SUPER_VEL = 22.0;
 
 
     // servo values
@@ -77,11 +74,13 @@ public class Evolution extends LinearOpMode {
     public static final double ELBOW_INTAKE = 0.83;
     public static final double WRIST_DRIVE = 0.24; // measured at .255
     public static final double WRIST_INTAKE = 0.476;
-    public static final double LEFT_FINGER_GRIP = 0.67;
+    public static final double LEFT_FINGER_GRIP = 0.64;
     public static final double LEFT_FINGER_DROP = .9;
+    public static final double LEFT_FINGER_PLOP = .77;
     public static final double LEFT_FINGER_INTAKE = 1;
     public static final double RIGHT_FINGER_GRIP = .33;
     public static final double RIGHT_FINGER_DROP = 0.1;
+    public static final double RIGHT_FINGER_PLOP = 0.219;
     public static final double RIGHT_FINGER_INTAKE = 0;
     public static final double TRIGGER_THRESHOLD = 0.5;
     public static final double LAUNCHER_START_POS = 0.8;
@@ -91,10 +90,16 @@ public class Evolution extends LinearOpMode {
 
     // stack positions (top 2 o 5 and next 2 of 3 )
     // TODO find positions with McMuffin (currently all set to drive) change to the actual double values like above from McMuffin
-    // intake two off a stack of five
+
+    // Arm position for grabbing the single top pixel from a stack
+    //public static final double SHOULDER_TOP_ONE = 0.31;
+    public static final double WRIST_TOP_ONE = 0.5149;
+    public static final double ELBOW_TOP_ONE = 0.7694;
+
+    // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
-    public static final double WRIST_TOP_TWO = 0.59;
-    public static final double ELBOW_TOP_TWO = 0.81;
+    public static final double WRIST_TOP_TWO = 0.505;
+    public static final double ELBOW_TOP_TWO = 0.772;
 
     // intake two off a stack of three
     public static final double SHOULDER_NEXT_TWO = 0.425;
@@ -107,10 +112,17 @@ public class Evolution extends LinearOpMode {
     // score positions (11 rows on the board)
     // TODO find positions with McMuffin (currently all set to drive) change to the actual double values like above from McMuffin
 
+    // Arm position for scoring pixel from the stack with the wrist in the upright position
+    public static final double SCORING_UPRIGHT_WRIST = 0.735;
+    public static final double SCORING_UPRIGHT_SHOULDER = 0.926;
+    public static final double SCORING_UPRIGHT_ELBOW = 0.66;
+    public static final double SCORING_RIGHT_FINGER = 0.25;
+    public static final double SCORING_LEFT_FINGER = 0.25;
+
     // score zero only used for that first yellow pixel in auto
-    public static final double SCORE_ZERO_SHOULDER = 0.94555;
+    public static final double SCORE_ZERO_SHOULDER = 0.936;
     public static final double SCORE_ZERO_WRIST = 0.284;
-    public static final double SCORE_ZERO_ELBOW = 0.63;
+    public static final double SCORE_ZERO_ELBOW = 0.65;
     public static final double SCORE_ZERO_LIFT = LIFT_DRIVE;
 
     // score position one button map (gamepad2.y)
@@ -181,7 +193,6 @@ public class Evolution extends LinearOpMode {
     private RevTouchSensor leftUpper;
     private RevTouchSensor rightLower;
     private RevTouchSensor leftLower;
-
 
     // state machines - states enumeration, positions, handle sequences, functions
     // INTAKE
@@ -269,10 +280,10 @@ public class Evolution extends LinearOpMode {
         // claw intake from floor
         //TODO: add saftey
         if (gamepad1.left_bumper && currentIntakeState == intakeState.IDLE) {
-                leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-                rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-                activeIntakePosition = new IntakePosition(LIFT_DRIVE, SHOULDER_INTAKE, WRIST_INTAKE, ELBOW_INTAKE, HIGH_ACC, HIGH_VEL);
-                currentIntakeState = intakeState.MOVING_SHOULDER;
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            activeIntakePosition = new IntakePosition(LIFT_DRIVE, SHOULDER_INTAKE, WRIST_INTAKE, ELBOW_INTAKE, HIGH_ACC, HIGH_VEL);
+            currentIntakeState = intakeState.MOVING_SHOULDER;
         }
         // claw intake the top 2 from a stack of 5
         if (gamepad1.b && currentIntakeState == intakeState.IDLE) {
@@ -356,8 +367,6 @@ public class Evolution extends LinearOpMode {
     private void handleDriveSequence(DrivePosition drivePos) {
         switch (currentDriveState) {
             case MOVING_LIFT:
-                leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 setLiftPosition(LIFT_DRIVE);
                 currentDriveState = driveState.MOVING_ELBOW;
                 break;
@@ -830,8 +839,6 @@ public class Evolution extends LinearOpMode {
         leftLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "leftLEDS"); // Adjust the name as per your configuration
         rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
 
-
-
         // servo modes
         shoulder.setDirection(Servo.Direction.REVERSE);
         wrist.setDirection(Servo.Direction.REVERSE);
@@ -865,45 +872,12 @@ public class Evolution extends LinearOpMode {
         MecanumDriveRunnable mecanumDriveRunnable = new MecanumDriveRunnable();
         Thread mecanumDriveThread = new Thread(mecanumDriveRunnable);
 
-
         waitForStart();
         runtime.reset();
 
         mecanumDriveThread.start();
 
         while(opModeIsActive()){
-
-            // telemetry
-            /*
-            telemetry.addData("Right Front Power", rightFront.getPower());
-            telemetry.addData("Left Front Power", leftFront.getPower());
-            telemetry.addData("Right Back Power", rightBack.getPower());
-            telemetry.addData("Left Back Power", leftBack.getPower());
-            telemetry.addData("Forward", gamepad1.left_stick_y);
-            telemetry.addData("Strafe", -gamepad1.left_stick_x);
-            telemetry.addData("Turn", -gamepad1.right_stick_x);
-            telemetry.addData("Mecanum Thread Running", mecanumDriveRunnable.running);
-            telemetry.addData("Loop Time", "Duration: " + runtime.milliseconds() + " ms");
-
-            */
-
-            telemetry.addData("Status", "Run " + runtime.toString());
-            telemetry.addData("Intake", currentIntakeState);
-            telemetry.addData("Drive", currentDriveState);
-            telemetry.addData("Score", currentScoreState);
-            telemetry.addData("Shoulder Position", shoulder.getPosition());
-            telemetry.addData("Wrist Position", wrist.getPosition());
-            telemetry.addData("Elbow Position", elbow.getPosition());
-            telemetry.addData("Lift Left", leftLift.getPosition());
-            telemetry.addData("Lift Right", rightLift.getPosition());
-            telemetry.addData("IntakePos", inIntakePos);
-            //telemetry.addData("tuckPreparing", tuckPreparing);
-
-            //telemetry.addData("Left Lower", leftLower.isPressed() ? "Pressed" : "Not Pressed");
-            //telemetry.addData("Left Upper", leftUpper.isPressed() ? "Pressed" : "Not Pressed");
-            //telemetry.addData("Right Lower", rightLower.isPressed() ? "Pressed" : "Not Pressed");
-            //telemetry.addData("Right Upper", rightUpper.isPressed() ? "Pressed" : "Not Pressed");
-
             // launcher
             airplane();
             // hang
@@ -918,10 +892,37 @@ public class Evolution extends LinearOpMode {
             scoringFunction();
             // emergency stop slides
             emergencyStop();
+            // auto close fingers on claw
             autoClose();
+            // auto tuck to drive position when both claws have a pixel
             autoTuck();
-            // mecanum drive
-            //driveCode(); say what
+            // telemetry
+            telemetry.addData("Status", "Run " + runtime.toString());
+            /*
+            telemetry.addData("Right Front Power", rightFront.getPower());
+            telemetry.addData("Left Front Power", leftFront.getPower());
+            telemetry.addData("Right Back Power", rightBack.getPower());
+            telemetry.addData("Left Back Power", leftBack.getPower());
+            telemetry.addData("Forward", gamepad1.left_stick_y);
+            telemetry.addData("Strafe", -gamepad1.left_stick_x);
+            telemetry.addData("Turn", -gamepad1.right_stick_x);
+            telemetry.addData("Mecanum Thread Running", mecanumDriveRunnable.running);
+            telemetry.addData("Loop Time", "Duration: " + runtime.milliseconds() + " ms");
+            telemetry.addData("Intake", currentIntakeState);
+            telemetry.addData("Drive", currentDriveState);
+            telemetry.addData("Score", currentScoreState);
+            telemetry.addData("Shoulder Position", shoulder.getPosition());
+            telemetry.addData("Wrist Position", wrist.getPosition());
+            telemetry.addData("Elbow Position", elbow.getPosition());
+            telemetry.addData("Lift Left", leftLift.getPosition());
+            telemetry.addData("Lift Right", rightLift.getPosition());
+            telemetry.addData("IntakePos", inIntakePos);
+            telemetry.addData("tuckPreparing", tuckPreparing);
+            telemetry.addData("Left Lower", leftLower.isPressed() ? "Pressed" : "Not Pressed");
+            telemetry.addData("Left Upper", leftUpper.isPressed() ? "Pressed" : "Not Pressed");
+            telemetry.addData("Right Lower", rightLower.isPressed() ? "Pressed" : "Not Pressed");
+            telemetry.addData("Right Upper", rightUpper.isPressed() ? "Pressed" : "Not Pressed");
+            */
             telemetry.update();
         }
 
