@@ -458,6 +458,8 @@ public class Evolution extends LinearOpMode {
         switch (currentScoreState) {
 
             case MOVING_SHOULDER:
+                leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                 // Move the shoulder to intake position
                 moveServoWithTrapezoidalVelocity(shoulder, scorePos.shoulderPosition, scorePos.accelerationMax, scorePos.velocityMax);
                 if (isServoAtPosition(shoulder, scorePos.shoulderPosition, SERVO_TOLERANCE)) {
@@ -750,10 +752,10 @@ public class Evolution extends LinearOpMode {
             rightFinger.setPosition(RIGHT_FINGER_DROP);
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-        } else if (gamepad2.dpad_left && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
+        } else if (gamepad2.dpad_right && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             leftFinger.setPosition(LEFT_FINGER_DROP);
             leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
-        } else if (gamepad2.dpad_right  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
+        } else if (gamepad2.dpad_left  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
             rightFinger.setPosition(RIGHT_FINGER_DROP);
             rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         } else if (gamepad2.dpad_down  && !gamepad2.right_bumper && currentIntakeState == intakeState.IDLE) {
