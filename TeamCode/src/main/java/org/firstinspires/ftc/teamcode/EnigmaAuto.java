@@ -463,7 +463,7 @@ public class EnigmaAuto extends LinearOpMode {
                             .build());
             safeWaitSeconds(WAIT_ONE_SEC);
             rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
-            safeWaitSeconds(WAIT_ONE_SEC);
+            safeWaitSeconds(WAIT_QUARTER_SEC);
 
             // return to drive
             for (int c = 0; c < 200; c++) {

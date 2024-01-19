@@ -93,13 +93,13 @@ public class Evolution extends LinearOpMode {
 
     // Arm position for grabbing the single top pixel from a stack
     //public static final double SHOULDER_TOP_ONE = 0.31;
-    public static final double WRIST_TOP_ONE = 0.5149;
-    public static final double ELBOW_TOP_ONE = 0.7694;
+    public static final double WRIST_TOP_ONE = 0.505;
+    public static final double ELBOW_TOP_ONE = 0.772;
 
     // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
     public static final double WRIST_TOP_TWO = 0.505;
-    public static final double ELBOW_TOP_TWO = 0.772;
+    public static final double ELBOW_TOP_TWO = 0.77;
 
     // intake two off a stack of three
     public static final double SHOULDER_NEXT_TWO = 0.425;
@@ -709,6 +709,8 @@ public class Evolution extends LinearOpMode {
     private void hangCode() {
         // hanging
         if (gamepad1.right_trigger > TRIGGER_THRESHOLD){
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
             if (!leftUpper.isPressed()) {
                 leftHang.setDirection(DcMotor.Direction.FORWARD);
                 leftHang.setPower(.9);
@@ -718,6 +720,8 @@ public class Evolution extends LinearOpMode {
                 rightHang.setPower(.9);
             }
         } else if (gamepad1.left_trigger > TRIGGER_THRESHOLD){
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
             if (!leftLower.isPressed()) {
                 leftHang.setDirection(DcMotor.Direction.REVERSE);
                 leftHang.setPower(.9);
@@ -741,6 +745,13 @@ public class Evolution extends LinearOpMode {
             rightHang.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             leftHang.setPower(0);
             rightHang.setPower(0);
+        }
+    }
+
+    private void flexING() {
+        if (gamepad1.back) {
+            leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
         }
     }
 
