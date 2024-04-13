@@ -56,7 +56,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 /**
  * ENIGMA Autonomous for with vision detection using EasyOpenCv and park
  */
-@Autonomous(name = "ENIGMA AUTO", group = "00-Autonomous", preselectTeleOp = "Evolution")
+@Autonomous(name = "ENIGMA AUTO", group = "00-Autonomous", preselectTeleOp = "FINALFORM")
 public class EnigmaAuto extends LinearOpMode {
 
     public static String TEAM_NAME = "ENIGMA"; //TODO: Enter team Name
@@ -162,13 +162,13 @@ public class EnigmaAuto extends LinearOpMode {
 
     private void drivearmpos(){
         for(int c = 0; c<30; c++) {
-            moveServoGradually(shoulder, Evolution.SHOULDER_DRIVE);
+            moveServoGradually(shoulder, FINALFORM.SHOULDER_DRIVE);
             sleep(5);
         }
-        elbow.setPosition(Evolution.ELBOW_DRIVE);
-        leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
-        rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
-        wrist.setPosition(Evolution.WRIST_DRIVE);
+        elbow.setPosition(FINALFORM.ELBOW_DRIVE);
+        leftFinger.setPosition(FINALFORM.LEFT_FINGER_GRIP);
+        rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
+        wrist.setPosition(FINALFORM.WRIST_DRIVE);
     }
     @Override
     public void runOpMode() throws InterruptedException {
@@ -189,13 +189,13 @@ public class EnigmaAuto extends LinearOpMode {
         rightLEDSBlinkin = hardwareMap.get(RevBlinkinLedDriver.class, "rightLEDS"); // Adjust the name as per your configuration
 
         //init pos
-        setLiftPosition(Evolution.LIFT_DRIVE);
-        shoulder.setPosition(Evolution.SHOULDER_DRIVE);
-        wrist.setPosition(Evolution.WRIST_INTAKE);
-        elbow.setPosition(Evolution.ELBOW_DRIVE);
+        setLiftPosition(FINALFORM.LIFT_DRIVE);
+        shoulder.setPosition(FINALFORM.SHOULDER_DRIVE);
+        wrist.setPosition(FINALFORM.WRIST_INTAKE);
+        elbow.setPosition(FINALFORM.ELBOW_DRIVE);
         sleep(3500);
-        leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
-        rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
+        leftFinger.setPosition(FINALFORM.LEFT_FINGER_GRIP);
+        rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
         leftLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         rightLEDSBlinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
 
@@ -404,10 +404,10 @@ public class EnigmaAuto extends LinearOpMode {
         }
 
         // Position intake claw to drop the Purple Pixel on Spike Mark
-        shoulder.setPosition(Evolution.SHOULDER_DRIVE);
-        wrist.setPosition(Evolution.WRIST_INTAKE);
+        shoulder.setPosition(FINALFORM.SHOULDER_DRIVE);
+        wrist.setPosition(FINALFORM.WRIST_INTAKE);
         for(int c = 0; c<44; c++) {
-            moveServoGradually(elbow, Evolution.ELBOW_INTAKE);
+            moveServoGradually(elbow, FINALFORM.ELBOW_INTAKE);
             safeWaitSeconds(WAIT_TWOHUNDRED_SEC);
         }
 
@@ -419,18 +419,18 @@ public class EnigmaAuto extends LinearOpMode {
                         .build());
 
         safeWaitSeconds(WAIT_TENTH_SEC);
-        rightFinger.setPosition(Evolution.RIGHT_FINGER_DROP);
+        rightFinger.setPosition(FINALFORM.RIGHT_FINGER_DROP);
         safeWaitSeconds(WAIT_TWELFTH_SEC);
 
         // prep to drive to the board
         for(int c = 0; c<44; c++) {
-            moveServoGradually(shoulder, Evolution.SHOULDER_DRIVE);
+            moveServoGradually(shoulder, FINALFORM.SHOULDER_DRIVE);
             safeWaitSeconds(.005);
         }
-        elbow.setPosition(Evolution.ELBOW_DRIVE);
-        leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
-        rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
-        wrist.setPosition(Evolution.WRIST_DRIVE);
+        elbow.setPosition(FINALFORM.ELBOW_DRIVE);
+        leftFinger.setPosition(FINALFORM.LEFT_FINGER_GRIP);
+        rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
+        wrist.setPosition(FINALFORM.WRIST_DRIVE);
 
         safeWaitSeconds(waitSecondsBeforeDrop);
         if (startPosition == START_POSITION.BLUE_RIGHT ||
@@ -444,34 +444,34 @@ public class EnigmaAuto extends LinearOpMode {
                             .build());
             // prepare claw to grab top pixel
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            shoulder.setPosition(Evolution.SHOULDER_DRIVE);
+            shoulder.setPosition(FINALFORM.SHOULDER_DRIVE);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            wrist.setPosition(Evolution.WRIST_INTAKE);
+            wrist.setPosition(FINALFORM.WRIST_INTAKE);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            rightFinger.setPosition(Evolution.RIGHT_FINGER_INTAKE);
+            rightFinger.setPosition(FINALFORM.RIGHT_FINGER_INTAKE);
             safeWaitSeconds(WAIT_QUARTER_SEC);
             for (int c = 0; c < 44; c++) {
-                moveServoGradually(wrist, Evolution.WRIST_TOP_ONE);
+                moveServoGradually(wrist, FINALFORM.WRIST_TOP_ONE);
                 safeWaitSeconds(.005);
             }
             safeWaitSeconds(WAIT_HALF_SEC);
-            elbow.setPosition(Evolution.ELBOW_TOP_ONE);
+            elbow.setPosition(FINALFORM.ELBOW_TOP_ONE);
             safeWaitSeconds(WAIT_ONE_SEC);
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .strafeToLinearHeading(intakegrab.position, intakegrab.heading)
                             .build());
             safeWaitSeconds(WAIT_ONE_SEC);
-            rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
+            rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
             safeWaitSeconds(WAIT_QUARTER_SEC);
 
             // return to drive
             for (int c = 0; c < 200; c++) {
-                moveServoGradually(shoulder, Evolution.SHOULDER_DRIVE);
+                moveServoGradually(shoulder, FINALFORM.SHOULDER_DRIVE);
                 safeWaitSeconds(.005);
             }
-            elbow.setPosition(Evolution.ELBOW_DRIVE);
-            wrist.setPosition(Evolution.WRIST_DRIVE);
+            elbow.setPosition(FINALFORM.ELBOW_DRIVE);
+            wrist.setPosition(FINALFORM.WRIST_DRIVE);
 
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
@@ -481,27 +481,27 @@ public class EnigmaAuto extends LinearOpMode {
 
             //prepare arm drop Pixel on Backdrop
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            shoulder.setPosition(Evolution.SCORE_ZERO_SHOULDER);
+            shoulder.setPosition(FINALFORM.SCORE_ZERO_SHOULDER);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            wrist.setPosition(Evolution.SCORE_ZERO_WRIST);
+            wrist.setPosition(FINALFORM.SCORE_ZERO_WRIST);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            elbow.setPosition(Evolution.SCORE_ZERO_ELBOW);
+            elbow.setPosition(FINALFORM.SCORE_ZERO_ELBOW);
             safeWaitSeconds(WAIT_ONE_SEC +.25);
 
             // drop both pixels
-            leftFinger.setPosition(Evolution.LEFT_FINGER_DROP);
-            rightFinger.setPosition(Evolution.RIGHT_FINGER_DROP);
+            leftFinger.setPosition(FINALFORM.LEFT_FINGER_DROP);
+            rightFinger.setPosition(FINALFORM.RIGHT_FINGER_DROP);
             safeWaitSeconds(WAIT_QUARTER_SEC);
 
             // return to drive
             for (int c = 0; c < 200; c++) {
-                moveServoGradually(shoulder, Evolution.SHOULDER_DRIVE);
+                moveServoGradually(shoulder, FINALFORM.SHOULDER_DRIVE);
                 safeWaitSeconds(.005);
             }
-            leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
-            rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
-            elbow.setPosition(Evolution.ELBOW_DRIVE);
-            wrist.setPosition(Evolution.WRIST_DRIVE);
+            leftFinger.setPosition(FINALFORM.LEFT_FINGER_GRIP);
+            rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
+            elbow.setPosition(FINALFORM.ELBOW_DRIVE);
+            wrist.setPosition(FINALFORM.WRIST_DRIVE);
 
         } else {
 
@@ -515,26 +515,26 @@ public class EnigmaAuto extends LinearOpMode {
 
             //prepare arm drop Pixel on Backdrop
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            shoulder.setPosition(Evolution.SCORE_ZERO_SHOULDER);
+            shoulder.setPosition(FINALFORM.SCORE_ZERO_SHOULDER);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            wrist.setPosition(Evolution.SCORE_ZERO_WRIST);
+            wrist.setPosition(FINALFORM.SCORE_ZERO_WRIST);
             safeWaitSeconds(WAIT_QUARTER_SEC);
-            elbow.setPosition(Evolution.SCORE_ZERO_ELBOW);
+            elbow.setPosition(FINALFORM.SCORE_ZERO_ELBOW);
             safeWaitSeconds(WAIT_ONE_SEC + .25);
 
             // drop yellow pixel
-            leftFinger.setPosition(Evolution.LEFT_FINGER_DROP);
+            leftFinger.setPosition(FINALFORM.LEFT_FINGER_DROP);
             safeWaitSeconds(WAIT_QUARTER_SEC);
 
             // return to drive
             for (int c = 0; c < 200; c++) {
-                moveServoGradually(shoulder, Evolution.SHOULDER_DRIVE);
+                moveServoGradually(shoulder, FINALFORM.SHOULDER_DRIVE);
                 safeWaitSeconds(.005);
             }
-            elbow.setPosition(Evolution.ELBOW_DRIVE);
-            leftFinger.setPosition(Evolution.LEFT_FINGER_GRIP);
-            rightFinger.setPosition(Evolution.RIGHT_FINGER_GRIP);
-            wrist.setPosition(Evolution.WRIST_DRIVE);
+            elbow.setPosition(FINALFORM.ELBOW_DRIVE);
+            leftFinger.setPosition(FINALFORM.LEFT_FINGER_GRIP);
+            rightFinger.setPosition(FINALFORM.RIGHT_FINGER_GRIP);
+            wrist.setPosition(FINALFORM.WRIST_DRIVE);
 
         }
 
