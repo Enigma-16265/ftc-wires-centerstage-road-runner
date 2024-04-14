@@ -362,7 +362,7 @@ public class EnigmaAuto extends LinearOpMode {
                 midwayPose1 = new Pose2d(17, -19, Math.toRadians(-90));
                 intakeStack = new Pose2d(54, -19,Math.toRadians(-90));
                 intakeprep = new Pose2d(54, -12.5,Math.toRadians(-90));
-                intakegrab = new Pose2d(54, -15.75,Math.toRadians(-90));
+                intakegrab = new Pose2d(54, -18,Math.toRadians(-90)); //y = 15.75
                 intakeStack2 = new Pose2d(53.25, 80.4,Math.toRadians(-90)); // drive back to board
                 waitSecondsBeforeDrop = 0; //TODO: Adjust time to wait for alliance partner to move from board
                 parkPose = new Pose2d(50, 84, Math.toRadians(-90));
@@ -484,7 +484,7 @@ public class EnigmaAuto extends LinearOpMode {
             shoulder.setPosition(FINALFORM.SCORE_ZERO_SHOULDER);
             safeWaitSeconds(WAIT_QUARTER_SEC);
             wrist.setPosition(FINALFORM.SCORE_ZERO_WRIST);
-            safeWaitSeconds(WAIT_QUARTER_SEC);
+            safeWaitSeconds(WAIT_HALF_SEC);
             elbow.setPosition(FINALFORM.SCORE_ZERO_ELBOW);
             safeWaitSeconds(WAIT_ONE_SEC +.25);
 

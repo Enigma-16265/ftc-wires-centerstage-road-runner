@@ -78,7 +78,7 @@ public class Evolution extends LinearOpMode {
     public static final double LEFT_FINGER_DROP = .9;
     public static final double LEFT_FINGER_PLOP = .77;
     public static final double LEFT_FINGER_INTAKE = 1;
-    public static final double RIGHT_FINGER_GRIP = .33;
+    public static final double RIGHT_FINGER_GRIP = .331;
     public static final double RIGHT_FINGER_DROP = 0.1;
     public static final double RIGHT_FINGER_PLOP = 0.219;
     public static final double RIGHT_FINGER_INTAKE = 0;
@@ -93,8 +93,8 @@ public class Evolution extends LinearOpMode {
 
     // Arm position for grabbing the single top pixel from a stack
     //public static final double SHOULDER_TOP_ONE = 0.31;
-    public static final double WRIST_TOP_ONE = 0.505;
-    public static final double ELBOW_TOP_ONE = 0.772;
+    public static final double WRIST_TOP_ONE = 0.535;
+    public static final double ELBOW_TOP_ONE = 0.71;
 
     // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;

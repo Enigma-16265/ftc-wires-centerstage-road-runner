@@ -79,14 +79,14 @@ public class FINALFORM extends LinearOpMode {
     public static final double LEFT_FINGER_DROP = 0.9;
     public static final double LEFT_FINGER_PLOP = 0.77;
     public static final double LEFT_FINGER_INTAKE = 0.93;
-    public static final double RIGHT_FINGER_GRIP = 0.33;
+    public static final double RIGHT_FINGER_GRIP = 0.32;
     public static final double RIGHT_FINGER_DROP = 0.1;
     public static final double RIGHT_FINGER_PLOP = 0.219;
     public static final double RIGHT_FINGER_INTAKE = 0;
     public static final double TRIGGER_THRESHOLD = 0.5;
     public static final double LAUNCHER_START_POS = 0.8;
     public static final double SERVO_TOLERANCE = 0.01;
-    public static final double LIFT_DRIVE = 0.06; // 0.78 is the highest it can mechanically go right now
+    public static final double LIFT_DRIVE = 0.06; // 0.78 is the highest it can mechanically go right now :skull:
     private double liftTargetPosition = LIFT_DRIVE; // was 0.37 before moving servos for larger range
 
     // stack positions (top 2 o 5 and next 2 of 3 )
@@ -94,8 +94,8 @@ public class FINALFORM extends LinearOpMode {
 
     // Arm position for grabbing the single top pixel from a stack
     //public static final double SHOULDER_TOP_ONE = 0.31;
-    public static final double WRIST_TOP_ONE = 0.505;
-    public static final double ELBOW_TOP_ONE = 0.772;
+    public static final double WRIST_TOP_ONE = 0.535;
+    public static final double ELBOW_TOP_ONE = 0.71;
 
     // Arm position for grabbing top two pixels from a stack
     public static final double SHOULDER_TOP_TWO = 0.425;
@@ -127,25 +127,25 @@ public class FINALFORM extends LinearOpMode {
     public static final double SCORE_ZERO_LIFT = LIFT_DRIVE;
 
     // score position one button map (gamepad2.y)
-    public static final double SCORE_ONE_SHOULDER = SCORE_ZERO_SHOULDER;
-    public static final double SCORE_ONE_WRIST = SCORE_ZERO_WRIST;
-    public static final double SCORE_ONE_ELBOW = SCORE_ZERO_ELBOW;
-    public static final double SCORE_ONE_LIFT = SCORE_ZERO_LIFT;
+    public static final double SCORE_ONE_SHOULDER = 0.965;
+    public static final double SCORE_ONE_WRIST = 0.31;
+    public static final double SCORE_ONE_ELBOW = 0.65;
+    public static final double SCORE_ONE_LIFT = 0.33;
     // score position two button map (gamepad2.b)
-    public static final double SCORE_TWO_SHOULDER = 0.935;
-    public static final double SCORE_TWO_WRIST = 0.265;
-    public static final double SCORE_TWO_ELBOW = 0.65;
-    public static final double SCORE_TWO_LIFT = 0.06;
+    public static final double SCORE_TWO_SHOULDER = SCORE_ONE_SHOULDER;
+    public static final double SCORE_TWO_WRIST = SCORE_ONE_WRIST;
+    public static final double SCORE_TWO_ELBOW = SCORE_ONE_ELBOW;
+    public static final double SCORE_TWO_LIFT = 0.43;
     // score position three button map (gamepad2.a)
-    public static final double SCORE_THREE_SHOULDER = 0.926;
-    public static final double SCORE_THREE_WRIST = 0.2;
-    public static final double SCORE_THREE_ELBOW = 0.69;
-    public static final double SCORE_THREE_LIFT = 0.06;
+    public static final double SCORE_THREE_SHOULDER = SCORE_ONE_SHOULDER;
+    public static final double SCORE_THREE_WRIST = SCORE_ONE_WRIST;
+    public static final double SCORE_THREE_ELBOW = SCORE_ONE_ELBOW;
+    public static final double SCORE_THREE_LIFT = 0.51;
     // score position four button map (gamepad2.x)
-    public static final double SCORE_FOUR_SHOULDER = 0.906;
-    public static final double SCORE_FOUR_WRIST = 0.2;
-    public static final double SCORE_FOUR_ELBOW = 0.68;
-    public static final double SCORE_FOUR_LIFT = 0.06;
+    public static final double SCORE_FOUR_SHOULDER = SCORE_ONE_SHOULDER;
+    public static final double SCORE_FOUR_WRIST = SCORE_ONE_WRIST;
+    public static final double SCORE_FOUR_ELBOW = SCORE_ONE_ELBOW;
+    public static final double SCORE_FOUR_LIFT = 0.59;
     // score position five button map (gamepad2.left_bumper && gamepad2.y)
     public static final double SCORE_FIVE_SHOULDER = 0.936;
     public static final double SCORE_FIVE_WRIST = 0.235;
@@ -181,7 +181,7 @@ public class FINALFORM extends LinearOpMode {
     private static final double SCORE_ELEVEN_WRIST = SCORE_EIGHT_WRIST;
     private static final double SCORE_ELEVEN_ELBOW = SCORE_EIGHT_ELBOW;
     private static final double SCORE_ELEVEN_LIFT = SCORE_EIGHT_LIFT;
-
+//
     public static final double SCORE_DOUBLE_SHOULDER = 0.916;
     public static final double SCORE_DOUBLE_WRIST = 0.84;
     public static final double SCORE_DOUBLE_ELBOW = 0.58;
